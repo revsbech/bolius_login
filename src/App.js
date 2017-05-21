@@ -1,10 +1,14 @@
-
 import React from "react";
-import ReactDOM from "react-dom";
-import SignUpForm from './components/SignUpForm';
+import './App.css';
 import AppRouter from './Router';
 
-//ReactDOM.render(<AppRouter />, document.getElementById('root'));
+
+class App extends React.Component {
+	render() {
+		return <AppRouter />;
+	}
+}
+
+export default App;
 
 
-export default SignUpForm;
