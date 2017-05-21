@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import AuthRoute from './AuthRoute';
 import SignUpForm from './components/SignUpForm';
 import SignInForm from './components/SignInForm';
+import ConfirmEmailForm from './components/ConfirmEmailForm';
 import Dashboard from './components/Dashboard';
 import DeleteUser from './components/DeleteUser';
 
@@ -11,6 +12,7 @@ const AppRouter = () => (
 		<di>
 			<Route path="/signin" component={SignInForm} ></Route>
 			<Route path="/signup" component={SignUpForm} ></Route>
+			<Route path="/confirm-email" component={ConfirmEmailForm} ></Route>
 			<AuthRoute path="/dashboard" component={Dashboard}/>
 			<AuthRoute path="/delete-user" component={DeleteUser}/>
 		</di>
