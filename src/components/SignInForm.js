@@ -1,22 +1,13 @@
-import {
-	CognitoUserPool,
-	CognitoUserAttribute
-} from "amazon-cognito-identity-js";
 import React from "react";
-import appConfig from "./config";
+import { Link } from 'react-router-dom';
+import auth from '../Authentication'
 
-
-const userPool = new CognitoUserPool({
-	UserPoolId: appConfig.UserPoolId,
-	ClientId: appConfig.ClientId,
-});
-
-class SignUpForm extends React.Component {
+class SignInForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: '',
-			password: '',
+			email: localStorage.getItem('cognitoUserEmail') || '',
+			password: ''
 		};
 	}
 
@@ -32,27 +23,16 @@ class SignUpForm extends React.Component {
 		e.preventDefault();
 		const email = this.state.email.trim();
 		const password = this.state.password.trim();
-		const attributeList = [
-			new CognitoUserAttribute({
-				Name: 'email',
-				Value: email,
-			})
-		];
-		userPool.signUp(email, password, attributeList, null, (err, result) => {
-			if (err) {
-				console.log(err);
-				return;
-			}
-			console.log('user name is ' + result.user.getUsername());
-			console.log('call result: ' + result);
-		});
+
+		localStorage.setItem('cognitoUserEmail', email);
+		auth.signIn(email, password, () => this.props.history.push('/dashboard'), this.props.history);
 	}
 
 	render() {
 		return (
 			<div className="wrapper">
 				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
-					<h2 className="form-signin-heading">Please Sign up</h2>
+					<h2 className="form-signin-heading">Sign in</h2>
 					<input type="text"
 						   className="form-control"
 						   value={this.state.email}
@@ -63,6 +43,7 @@ class SignUpForm extends React.Component {
 						   value={this.state.password}
 						   placeholder="Password"
 						   onChange={this.handlePasswordChange.bind(this)}/>
+					<Link to="/signup">Register new user?</Link>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn"/>
 				</form>
 			</div>
@@ -70,4 +51,4 @@ class SignUpForm extends React.Component {
 	}
 }
 
-export default SignUpForm;
+export default SignInForm;

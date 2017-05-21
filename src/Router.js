@@ -1,13 +1,13 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import SignUpForm from './SignUpForm';
-import SignInForm from './SignInForm';
+import SignUpForm from './components/SignUpForm';
+import SignInForm from './components/SignInForm';
 
 const AppRouter = () => (
 	<Router>
 		<di>
-			<Route exact path="/" component={SignInForm} ></Route>
-			<Route path="/register" component={SignUpForm} ></Route>
+			<Route path="/signin" component={SignInForm} ></Route>
+			<Route path="/signup" component={SignUpForm} ></Route>
 		</di>
 	</Router>
 );
