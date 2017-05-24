@@ -1,0 +1,14 @@
+version: '2'
+
+volumes:
+  ssh-agent:
+    external: true
+
+services:
+  devtools:
+    image: pcodk/devtools
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/var/www/application
+    command: ["npm","start"]
