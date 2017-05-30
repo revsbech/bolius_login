@@ -1,9 +1,11 @@
+
 import {
 	AuthenticationDetails,
 	CognitoUserAttribute,
 	CognitoUserPool,
-	CognitoUser
+	CognitoUser,
 } from "amazon-cognito-identity-js";
+import {config, CognitoIdentityCredentials} from "aws-sdk";
 import appConfig from "./config";
 
 const auth = {
@@ -25,6 +27,41 @@ const auth = {
 
 			return session.isValid();
 		});
+	},
+	getIdTokenOfCurrentUser() {
+		let cognitoUser = this._getCurrentUser();
+
+		if (!cognitoUser) return false;
+
+		return cognitoUser.getSession((err, session) => {
+			if (!session) {
+				//throw(err); // have your route handler toss user back to login route
+				return false
+			}
+
+			return session.getIdToken();
+		});
+
+	},
+	getPropertiesOfCurrentUser() {
+		let cognitoUser = this._getCurrentUser();
+
+		console.log(cognitoUser);
+		cognitoUser.getSession((err, session) => {
+			if (!session) {
+				return false;
+			}
+			cognitoUser.getUserAttributes(function(err, result) {
+	      if (err) {
+	        alert(err);
+	        return;
+	      }
+	      console.log(result);
+	      return result;
+	    });
+
+    });
+
 	},
 
 	confirmEmail(email, confirmationCode, cb) {
@@ -64,6 +101,45 @@ const auth = {
 
 	},
 
+	signInFacebook(accesstoken, cb, history) {
+		config.region = appConfig.region
+			//"eu-central-1";
+		config.credentials = new CognitoIdentityCredentials({
+			IdentityPoolId: appConfig.IdentityPoolId,
+			Logins: {
+				'graph.facebook.com': accesstoken,
+			}
+    });
+		//'eu-central-1:623e48e1-a865-4a64-b0e1-75c9faac18bb'
+
+		config.credentials.get(function(err) {
+			if (err) return console.log("Error", err);
+			//console.log(config.credentials);
+			alert("Login ok. Your Cognito Identity ID is " + config.credentials.identityId)
+			/**
+			console.log("Identity ID: " + config.credentials.identityId);
+			console.log("access key: " + config.credentials.accessKeyId);
+			cogId = new CognitoIdentity()
+			cogId.describeIdentity({})
+			 */
+
+			// @todo finde the User associate dwith this  identified with this ID.
+
+			//let user = CognitoIdentityServiceProvider.(userData);
+			/*
+			let provider = new CognitoIdentityServiceProvider();
+
+			let user = provider.getUser({
+				AccessToken: config.credentials.accessKeyId
+			});
+			console.log(user);
+			/**/
+
+		});
+
+
+	},
+
 	signIn(email, password, cb, history) {
 
 		let authenticationData = {
@@ -77,6 +153,10 @@ const auth = {
 			Username : email,
 			Pool : userPool
 		};
+
+		// Should this not be with the identity provider, instead of the raw user
+		//let cognitoUser = new CognitoIdentityServiceProvider.CognitoUser(userData);
+
 		let cognitoUser = new CognitoUser(userData);
 
 		cognitoUser.authenticateUser(authenticationDetails, {
