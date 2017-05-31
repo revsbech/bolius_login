@@ -5,8 +5,11 @@ import {
 	CognitoUserPool,
 	CognitoUser,
 } from "amazon-cognito-identity-js";
-import {config, CognitoIdentityCredentials} from "aws-sdk";
+import AWS  from "aws-sdk";
+import "amazon-cognito-js"
 import appConfig from "./config";
+
+AWS.config.region = appConfig.region;
 
 const auth = {
 	poolData: {
@@ -14,6 +17,18 @@ const auth = {
 		ClientId: appConfig.ClientId,
 	},
 
+	userHasValidIdentitySession() {
+
+		if (!AWS.config.credentials) {
+			console.log("No credentials");
+			return false;
+		}
+		// @todo I'm not sure how this is validated, perhaps by calling AWS.config.credentials.get og getPromise?
+		if (AWS.config.credentials.accessKeyId) {
+			return true;
+		}
+		return false;
+	},
 	userHasValidSession() {
 		let cognitoUser = this._getCurrentUser();
 
@@ -43,6 +58,30 @@ const auth = {
 		});
 
 	},
+
+	getSyncedData(cb) {
+		//@Should we somehow check if get call to credentials.get is really needed?
+		AWS.config.credentials = this._getAwsIdentityCredentials();
+		AWS.config.credentials.get(() => {
+      let syncClient = new AWS.CognitoSyncManager();
+    	syncClient.openOrCreateDataset('myTestDataSet', function (err, dataset) {
+				dataset.getAllRecords(function (err, record) {
+					console.log(record);
+					let user = {};
+					for (var i=0, l=record.length; i<l; i++) {
+						user[record[i]["key"]] = record[i]["value"];
+          }
+
+					if (cb && typeof cb === 'function') {
+						cb(user);
+					}
+
+				});
+    });
+  });
+
+	},
+
 	getPropertiesOfCurrentUser() {
 		let cognitoUser = this._getCurrentUser();
 
@@ -101,43 +140,29 @@ const auth = {
 
 	},
 
-	signInFacebook(accesstoken, cb, history) {
-		config.region = appConfig.region
-			//"eu-central-1";
-		config.credentials = new CognitoIdentityCredentials({
-			IdentityPoolId: appConfig.IdentityPoolId,
-			Logins: {
-				'graph.facebook.com': accesstoken,
-			}
-    });
-		//'eu-central-1:623e48e1-a865-4a64-b0e1-75c9faac18bb'
+	signInFacebook(fbResponse, cb, history) {
+		let accessToken = fbResponse.accessToken;
+		AWS.config.credentials = this._getAwsIdentityCredentials({facebook: accessToken});
 
-		config.credentials.get(function(err) {
+		AWS.config.credentials.get((err) => {
 			if (err) return console.log("Error", err);
-			//console.log(config.credentials);
-			alert("Login ok. Your Cognito Identity ID is " + config.credentials.identityId)
-			/**
-			console.log("Identity ID: " + config.credentials.identityId);
-			console.log("access key: " + config.credentials.accessKeyId);
-			cogId = new CognitoIdentity()
-			cogId.describeIdentity({})
-			 */
-
-			// @todo finde the User associate dwith this  identified with this ID.
-
-			//let user = CognitoIdentityServiceProvider.(userData);
-			/*
-			let provider = new CognitoIdentityServiceProvider();
-
-			let user = provider.getUser({
-				AccessToken: config.credentials.accessKeyId
+			//@todo We should update name and email when logging in with facebook
+			//Do a sync of data from CognitoSync
+			let syncClient = new AWS.CognitoSyncManager();
+			syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
+				dataset.synchronize({
+					onSuccess: function (data, newRecords) {
+						console.log("Successufl login with facebook");
+						cb();
+					},
+					onError: function(error) {
+						console.log(error);
+					}
+				});
 			});
-			console.log(user);
-			/**/
+
 
 		});
-
-
 	},
 
 	signIn(email, password, cb, history) {
@@ -154,16 +179,33 @@ const auth = {
 			Pool : userPool
 		};
 
-		// Should this not be with the identity provider, instead of the raw user
-		//let cognitoUser = new CognitoIdentityServiceProvider.CognitoUser(userData);
-
 		let cognitoUser = new CognitoUser(userData);
 
 		cognitoUser.authenticateUser(authenticationDetails, {
-			onSuccess: function (result) {
-				if (cb && typeof cb === 'function') {
-					cb();
-				}
+			onSuccess: (result) => {
+				// We register the user in the Identity pool in order to initiate a federeated Identity session which is what treats us as logged in.
+				AWS.config.credentials = this._getAwsIdentityCredentials();
+				AWS.config.credentials.get((err) => {
+          if (err) return console.log("Error", err);
+					if (cb && typeof cb === 'function') {
+
+						//Do a sync of data from CognitoSync
+						let syncClient = new AWS.CognitoSyncManager();
+						syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
+              dataset.synchronize({
+                onSuccess: function (data, newRecords) {
+									cb();
+                },
+								onError: function(error) {
+                	console.log(error);
+								}
+              });
+            });
+
+
+
+					}
+				});
 			},
 
 			onFailure: function(err) {
@@ -227,6 +269,31 @@ const auth = {
 			Pool : userPool
 		};
 		return new CognitoUser(userData);
+	},
+
+  /**
+	 * Build theAwsCognitoIdentityCredentials based on alle the current logins (facebook, UserPool etc)
+	 *
+   * @returns {CognitoIdentityCredentials}
+   * @private
+   */
+	_getAwsIdentityCredentials(tokens) {
+
+		// First check if logged in to UserPool
+		let logins = {};
+		if (this.userHasValidSession()) {
+			let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
+			logins[cognitoKey] = this.getIdTokenOfCurrentUser().getJwtToken();
+		}
+		//@todo How do I check if already logged in to facebook in order to add the facebook token. For now we rely on the tokens being part of the call
+		if (tokens && tokens.facebook) {
+			logins['graph.facebook.com'] = tokens.facebook
+		}
+
+    return new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: appConfig.IdentityPoolId,
+      Logins: logins
+    });
 	}
 };
 

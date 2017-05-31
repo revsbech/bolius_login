@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
 
-
 class SignInForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -35,8 +34,9 @@ class SignInForm extends React.Component {
 			return;
 		}
 
-		console.log("You are.."  + response.accessToken);
-		auth.signInFacebook(response.accessToken,  () => this.props.history.push('/dashboard'), this.props.history);
+		console.log(response);
+		//console.log("You are.."  + response.accessToken);
+		auth.signInFacebook(response,  () => this.props.history.push('/dashboard'), this.props.history);
 
 	}
 

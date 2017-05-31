@@ -4,7 +4,7 @@ import auth from './Authentication';
 
 const AuthRoute = ({ component: Component, ...rest }) => (
 	<Route {...rest} render={props => (
-		auth.userHasValidSession() ? (
+		auth.userHasValidIdentitySession() ? (
 			<Component {...props}/>
 		) : (
 			<Redirect to={{
