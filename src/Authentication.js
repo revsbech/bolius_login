@@ -165,11 +165,17 @@ const auth = {
 
 		AWS.config.credentials.get((err) => {
 			if (err) return console.log("Error", err);
-			//@todo We should update name and email in the dataset when logging in with facebook
 
 			//Do a sync of data from CognitoSync
 			let syncClient = new AWS.CognitoSyncManager();
 			syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
+				if (fbResponse.name) {
+					dataset.put('name', fbResponse.name, function(err, recod) {});
+				}
+				if (fbResponse.email) {
+					dataset.put('email', fbResponse.email, function(err, record) {});
+				}
+
 				dataset.synchronize({
 					onSuccess: function (data, newRecords) {
 						cb();
