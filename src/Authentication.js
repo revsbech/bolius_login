@@ -19,6 +19,12 @@ const auth = {
 
 	userHasValidIdentitySession() {
 
+		//Hack that simple checks localStorage
+		if (localStorage.getItem("aws.cognito.identity-id." + appConfig.IdentityPoolId)) {
+			console.log("Found in localstorage!!!");
+			return true;
+		}
+
 		if (!AWS.config.credentials) {
 			return false;
 		}
@@ -36,13 +42,15 @@ const auth = {
 			}
 		});
 		/**/
+
+
 		if (AWS.config.credentials.accessKeyId) {
 			return true;
 		}
 		return false;
 
 	},
-	userHasValidSession() {
+	userHasValidUserpoolSession() {
 		let cognitoUser = this._getCurrentUser();
 
 		if (!cognitoUser) return false;
@@ -295,7 +303,7 @@ const auth = {
 
 		// First check if logged in to UserPool
 		let logins = {};
-		if (this.userHasValidSession()) {
+		if (this.userHasValidUserpoolSession()) {
 			let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
 			logins[cognitoKey] = this.getIdTokenOfCurrentUser().getJwtToken();
 		}
