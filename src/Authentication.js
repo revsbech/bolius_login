@@ -20,14 +20,27 @@ const auth = {
 	userHasValidIdentitySession() {
 
 		if (!AWS.config.credentials) {
-			console.log("No credentials");
 			return false;
 		}
-		// @todo I'm not sure how this is validated, perhaps by calling AWS.config.credentials.get og getPromise?
+
+		// @todo Instead of simple checking if the accessKeyId is present, we should make a call to credentials.get to make sure
+		// the login is valid, but I cant figure out how to do this correctly since the credentials.get call is done async. Perhaps by issuing promies
+		// that the routeHandler can check?
+		/*
+		return AWS.config.credentials.get((err) => {
+			return true;
+			console.log("Checking credentials");
+			if (!err) {
+				console.log("No error, credentials valid");
+				return true;
+			}
+		});
+		/**/
 		if (AWS.config.credentials.accessKeyId) {
 			return true;
 		}
 		return false;
+
 	},
 	userHasValidSession() {
 		let cognitoUser = this._getCurrentUser();
@@ -66,7 +79,6 @@ const auth = {
       let syncClient = new AWS.CognitoSyncManager();
     	syncClient.openOrCreateDataset('myTestDataSet', function (err, dataset) {
 				dataset.getAllRecords(function (err, record) {
-					console.log(record);
 					let user = {};
 					for (var i=0, l=record.length; i<l; i++) {
 						user[record[i]["key"]] = record[i]["value"];
@@ -84,8 +96,6 @@ const auth = {
 
 	getPropertiesOfCurrentUser() {
 		let cognitoUser = this._getCurrentUser();
-
-		console.log(cognitoUser);
 		cognitoUser.getSession((err, session) => {
 			if (!session) {
 				return false;
@@ -95,7 +105,6 @@ const auth = {
 	        alert(err);
 	        return;
 	      }
-	      console.log(result);
 	      return result;
 	    });
 
@@ -142,17 +151,19 @@ const auth = {
 
 	signInFacebook(fbResponse, cb, history) {
 		let accessToken = fbResponse.accessToken;
-		AWS.config.credentials = this._getAwsIdentityCredentials({facebook: accessToken});
+		//Store facebook token in local storage to make it aveailble for the _getAwsIdentityCredentials
+		localStorage.setItem('facebookAccessToken', accessToken);
+		AWS.config.credentials = this._getAwsIdentityCredentials();
 
 		AWS.config.credentials.get((err) => {
 			if (err) return console.log("Error", err);
-			//@todo We should update name and email when logging in with facebook
+			//@todo We should update name and email in the dataset when logging in with facebook
+
 			//Do a sync of data from CognitoSync
 			let syncClient = new AWS.CognitoSyncManager();
 			syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
 				dataset.synchronize({
 					onSuccess: function (data, newRecords) {
-						console.log("Successufl login with facebook");
 						cb();
 					},
 					onError: function(error) {
@@ -188,22 +199,19 @@ const auth = {
 				AWS.config.credentials.get((err) => {
           if (err) return console.log("Error", err);
 					if (cb && typeof cb === 'function') {
-
+						//@Todo: We should the the name and email (and other fields) from the CongitoUser and save the in the dataset
 						//Do a sync of data from CognitoSync
 						let syncClient = new AWS.CognitoSyncManager();
 						syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
               dataset.synchronize({
                 onSuccess: function (data, newRecords) {
-									cb();
+                  cb();
                 },
-								onError: function(error) {
-                	console.log(error);
-								}
+                onError: function (error) {
+                  console.log(error);
+                }
               });
-            });
-
-
-
+						});
 					}
 				});
 			},
@@ -220,15 +228,21 @@ const auth = {
 	},
 
 	signOut(cb) {
+
+		// Remove the facebook access token sotred locally
+		localStorage.setItem('facebookAccessToken', null);
+
+		// If signed in with username/password, log out of cognito UserPool
 		let cognitoUser = this._getCurrentUser();
 		if (cognitoUser) {
 			cognitoUser.signOut();
-			if (cb && typeof cb === 'function') {
-				cb();
-			}
-		} else {
-			throw new Error('No instance of cognitoUser to sign out!');
 		}
+
+		//@Todo Would it not be cleaner with a promise?
+		if (cb && typeof cb === 'function') {
+			cb();
+		}
+
 	},
 
 	deleteUser(cb) {
@@ -285,9 +299,9 @@ const auth = {
 			let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
 			logins[cognitoKey] = this.getIdTokenOfCurrentUser().getJwtToken();
 		}
-		//@todo How do I check if already logged in to facebook in order to add the facebook token. For now we rely on the tokens being part of the call
-		if (tokens && tokens.facebook) {
-			logins['graph.facebook.com'] = tokens.facebook
+		let facebookAccessToken = localStorage.getItem('facebookAccessToken');
+		if (facebookAccessToken) {
+			logins['graph.facebook.com'] = facebookAccessToken
 		}
 
     return new AWS.CognitoIdentityCredentials({
