@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import auth from '../Authentication'
+import auth from '../Authentication';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import { increment, decrement } from '../Redux/actions';
 
 class SignInForm extends React.Component {
 	constructor(props) {
@@ -46,9 +49,16 @@ class SignInForm extends React.Component {
 					<Link to="/signup">Register new user?</Link>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn"/>
 				</form>
+				<div>{this.props.state.counter}</div>
+				<button onClick={this.props.increment}>+</button>
+				<button onClick={this.props.decrement}>-</button>
 			</div>
 		);
 	}
 }
 
-export default SignInForm;
+const mapStateToProps = (state) => ({state});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({increment, decrement}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);

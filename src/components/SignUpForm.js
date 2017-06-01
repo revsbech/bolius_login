@@ -1,5 +1,6 @@
 import React from "react";
 import auth from '../Authentication';
+import {connect} from 'react-redux';
 
 class SignUpForm extends React.Component {
 	constructor(props) {
@@ -43,9 +44,11 @@ class SignUpForm extends React.Component {
 						   onChange={this.handlePasswordChange.bind(this)}/>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn"/>
 				</form>
+				<div>Counter state: {this.props.state.counter}</div>
 			</div>
 		);
 	}
 }
+const mapStateToProps = (state) => ({state});
 
-export default SignUpForm;
+export default connect(mapStateToProps)(SignUpForm);
