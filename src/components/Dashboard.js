@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import auth from '../Authentication';
 import AWS from "aws-sdk";
 import FacebookLogin from 'react-facebook-login';
+import {connect} from 'react-redux';
 
 class Dashboard extends React.Component {
 
@@ -64,7 +65,6 @@ class Dashboard extends React.Component {
 					<Link to="/delete-user">Delete user?</Link>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Sign out"/>
 			<hr />
-			<p>Facebook goes here</p>
 		<FacebookLogin
 		    appId="294138207713667"
 		    autoLoad={false}
@@ -72,10 +72,14 @@ class Dashboard extends React.Component {
 		    callback={this.responseFacebook}
 				textButton="Tilknyt facebook"
 		    />
+					<div>Counter state: {this.props.state.counter}</div>
 				</form>
 			</div>
 		);
 	}
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => ({state});
+
+export default connect(mapStateToProps)(Dashboard);
+
