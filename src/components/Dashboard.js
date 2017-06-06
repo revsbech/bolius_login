@@ -23,11 +23,16 @@ class Dashboard extends React.Component {
 	}
 
 	handleCreateIdentity(e) {
+
 		e.preventDefault();
+		console.log(AWS.config.credentials);
+		/*
+
 		auth.getSyncedData((user) => {
 			this.setState({userDetails: user});
 		});
 		return;
+		*/
 	}
 
 	responseFacebook(response) {
@@ -63,6 +68,7 @@ class Dashboard extends React.Component {
 					<h2 className="form-signin-heading">Hep {this.state.userDetails.name}, you are perfectly signed in :)</h2>
 			<p><a target="blank" href={'http://localhost/index.php?id=37&logintype=login&cognito_id_token=' + token}>Login to bolius (Test-link)</a></p>
 					<Link to="/delete-user">Delete user?</Link>
+			<p><a href="#" onClick={this.handleCreateIdentity} >Test</a></p>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Sign out"/>
 			<hr />
 		<FacebookLogin

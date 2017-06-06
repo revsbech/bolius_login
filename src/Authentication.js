@@ -157,6 +157,7 @@ const auth = {
 
 	},
 
+
 	signInFacebook(fbResponse, cb, history) {
 		let accessToken = fbResponse.accessToken;
 		//Store facebook token in local storage to make it aveailble for the _getAwsIdentityCredentials
@@ -164,8 +165,10 @@ const auth = {
 		AWS.config.credentials = this._getAwsIdentityCredentials();
 
 		AWS.config.credentials.get((err) => {
-			if (err) return console.log("Error", err);
 
+
+			if (err) return console.log("Error", err);
+			//AWS.config.credentials
 			//Do a sync of data from CognitoSync
 			let syncClient = new AWS.CognitoSyncManager();
 			syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
@@ -243,8 +246,8 @@ const auth = {
 
 	signOut(cb) {
 
-		// Remove the facebook access token sotred locally
-		localStorage.setItem('facebookAccessToken', null);
+		// Remove the facebook access token stored locally
+		localStorage.removeItem('facebookAccessToken');
 
 		// If signed in with username/password, log out of cognito UserPool
 		let cognitoUser = this._getCurrentUser();
@@ -279,6 +282,19 @@ const auth = {
 		}
 	},
 
+	getOpenIdTokenForCurrentUser() {
+		var params = {
+			IdentityId: localStorage.getItem("aws.cognito.identity-id." + appConfig.IdentityPoolId),
+			Logins: this._getLoginsFromLocallyStoredAccessTokens()
+		};
+
+		AWS.CognitoIdentity.getOpenIdToken(params, function(err,data) {
+			console.log(err);
+			console.log(data);
+		});
+
+	},
+
 	_getUserPool() {
 		return new CognitoUserPool(this.poolData);
 	},
@@ -305,23 +321,28 @@ const auth = {
    * @returns {CognitoIdentityCredentials}
    * @private
    */
-	_getAwsIdentityCredentials(tokens) {
+	_getAwsIdentityCredentials() {
 
 		// First check if logged in to UserPool
+
+    return new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: appConfig.IdentityPoolId,
+      Logins: this._getLoginsFromLocallyStoredAccessTokens()
+    });
+	},
+
+	_getLoginsFromLocallyStoredAccessTokens() {
 		let logins = {};
 		if (this.userHasValidUserpoolSession()) {
 			let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
 			logins[cognitoKey] = this.getIdTokenOfCurrentUser().getJwtToken();
 		}
+
 		let facebookAccessToken = localStorage.getItem('facebookAccessToken');
-		if (facebookAccessToken) {
+		if (facebookAccessToken && facebookAccessToken !== "null") {
 			logins['graph.facebook.com'] = facebookAccessToken
 		}
-
-    return new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: appConfig.IdentityPoolId,
-      Logins: logins
-    });
+		return logins;
 	}
 };
 
