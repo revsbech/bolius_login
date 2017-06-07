@@ -283,14 +283,22 @@ const auth = {
 	},
 
 	getOpenIdTokenForCurrentUser() {
+		let id = AWS.config.credentials.identityId;
 		var params = {
-			IdentityId: localStorage.getItem("aws.cognito.identity-id." + appConfig.IdentityPoolId),
+			IdentityId: id,
 			Logins: this._getLoginsFromLocallyStoredAccessTokens()
 		};
 
-		AWS.CognitoIdentity.getOpenIdToken(params, function(err,data) {
-			console.log(err);
-			console.log(data);
+		return new Promise((resolve, reject) => {
+				let cognitoidentity  = new AWS.CognitoIdentity();
+				cognitoidentity.getOpenIdToken(params, function(err,data) {
+					//@todo handle if err != null (call reject)
+					if (err != null) {
+						reject(err);
+					}
+					resolve(data.Token);
+				});
+
 		});
 
 	},

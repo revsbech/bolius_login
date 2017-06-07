@@ -1,15 +1,20 @@
 import React from "react";
+import TokenViewer from './TokenViewer';
 import { Link } from 'react-router-dom';
 import auth from '../Authentication';
 import AWS from "aws-sdk";
 import FacebookLogin from 'react-facebook-login';
 import {connect} from 'react-redux';
 
+
 class Dashboard extends React.Component {
 
 	constructor() {
     super();
-    this.state = {userDetails: {}};
+    this.state = {
+    	userDetails: {},
+			openIdToken: ""
+    };
 		auth.getSyncedData((user) => {
 			this.setState({userDetails: user});
 		});
@@ -23,27 +28,19 @@ class Dashboard extends React.Component {
 	}
 
 	handleCreateIdentity(e) {
-
 		e.preventDefault();
-		console.log(AWS.config.credentials);
-		/*
-
-		auth.getSyncedData((user) => {
-			this.setState({userDetails: user});
+		console.log("Fetching id");
+		auth.getOpenIdTokenForCurrentUser().then((token) => {
+			console.log(token);
+			this.setState({openIdToken: token});
 		});
-		return;
-		*/
 	}
 
 	responseFacebook(response) {
-
-		//console.log("facebook resp");
-		//console.log(response);
-
 		AWS.config.region = "eu-central-1";
 		var jwtToken = auth.getIdTokenOfCurrentUser().getJwtToken();
 
-		//@todo Shoudl probably be moved somewhere else, and at least read the IdentityPoolId and userPoolId
+		//@todo Should probably be moved somewhere else, and at least read the IdentityPoolId and userPoolId
 		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 			IdentityPoolId: 'eu-central-1:623e48e1-a865-4a64-b0e1-75c9faac18bb',
 			Logins: {
@@ -60,15 +57,13 @@ class Dashboard extends React.Component {
 
 	}
 	render() {
-		//const token = auth.getIdTokenOfCurrentUser().getJwtToken();
-		const token = "xxx";
 		return (
 			<div className="wrapper">
 				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
 					<h2 className="form-signin-heading">Hep {this.state.userDetails.name}, you are perfectly signed in :)</h2>
-			<p><a target="blank" href={'http://localhost/index.php?id=37&logintype=login&cognito_id_token=' + token}>Login to bolius (Test-link)</a></p>
+			<p><a target="blank" href={'http://localhost/index.php?id=37&logintype=login&cognito_id_token=' + this.state.openIdToken}>Login to bolius (Test-link)</a></p>
 					<Link to="/delete-user">Delete user?</Link>
-			<p><a href="#" onClick={this.handleCreateIdentity} >Test</a></p>
+			<p><a href="#" onClick={this.handleCreateIdentity.bind(this)} >Fetch OpenID Token for further validation</a></p>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Sign out"/>
 			<hr />
 		<FacebookLogin
@@ -78,6 +73,7 @@ class Dashboard extends React.Component {
 		    callback={this.responseFacebook}
 				textButton="Tilknyt facebook"
 		    />
+					<TokenViewer token={this.state.openIdToken} />
 					<div>Counter state: {this.props.state.counter}</div>
 				</form>
 			</div>
