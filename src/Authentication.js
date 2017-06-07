@@ -181,8 +181,8 @@ const auth = {
 					dataset.put('name', fbResponse.name, function(err, recod) {});
 				}
 				if (fbResponse.email) {
-					//dataset.put('email', fbResponse.email, function(err, record) {});
-					dataset.put('email', "jer+3@peytz.dk", function(err, record) {});
+					dataset.put('email', fbResponse.email, function(err, record) {});
+					//dataset.put('email', "jer+4@peytz.dk", function(err, record) {});
 				}
 
 				dataset.synchronize({
