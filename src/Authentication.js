@@ -82,22 +82,21 @@ const auth = {
 
 	getSyncedData(cb) {
 		//@Should we somehow check if get call to credentials.get is really needed?
-		AWS.config.credentials = this._getAwsIdentityCredentials();
-		AWS.config.credentials.get(() => {
-      let syncClient = new AWS.CognitoSyncManager();
-    	syncClient.openOrCreateDataset('myTestDataSet', function (err, dataset) {
-				dataset.getAllRecords(function (err, record) {
-					let user = {};
-					for (var i=0, l=record.length; i<l; i++) {
-						user[record[i]["key"]] = record[i]["value"];
-          }
+		this.callGetIdentity().then(() => {
+			let syncClient = new AWS.CognitoSyncManager();
+			syncClient.openOrCreateDataset('myTestDataSet', function (err, dataset) {
+			dataset.getAllRecords(function (err, record) {
+				let user = {};
+				for (var i=0, l=record.length; i<l; i++) {
+					user[record[i]["key"]] = record[i]["value"];
+				}
 
-					if (cb && typeof cb === 'function') {
-						cb(user);
-					}
+				if (cb && typeof cb === 'function') {
+					cb(user);
+				}
+			});
 
-				});
-    });
+		});
   });
 
 	},
@@ -174,12 +173,7 @@ const auth = {
 		//Store facebook token in local storage to make it aveailble for the _getAwsIdentityCredentials
 		localStorage.setItem('facebookAccessToken', accessToken);
 		AWS.config.credentials = this._getAwsIdentityCredentials();
-
-		AWS.config.credentials.get((err) => {
-
-
-			if (err) return console.log("Error", err);
-			//AWS.config.credentials
+		this.callGetIdentity().then(() => {
 			//Do a sync of data from CognitoSync
 			let syncClient = new AWS.CognitoSyncManager();
 			syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
@@ -200,7 +194,6 @@ const auth = {
 					}
 				});
 			});
-
 
 		});
 	},
@@ -225,23 +218,21 @@ const auth = {
 			onSuccess: (result) => {
 				// We register the user in the Identity pool in order to initiate a federeated Identity session which is what treats us as logged in.
 				AWS.config.credentials = this._getAwsIdentityCredentials();
-				AWS.config.credentials.get((err) => {
-          if (err) return console.log("Error", err);
-					if (cb && typeof cb === 'function') {
-						//@Todo: We should the the name and email (and other fields) from the CongitoUser and save the in the dataset
-						//Do a sync of data from CognitoSync
-						let syncClient = new AWS.CognitoSyncManager();
-						syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
-              dataset.synchronize({
-                onSuccess: function (data, newRecords) {
-                  cb();
-                },
-                onError: function (error) {
-                  console.log(error);
-                }
-              });
-						});
-					}
+				this.callGetIdentity().then(() => {
+					//@Todo: Maybe we should the the name and email (and other fields) from the CongitoUser and save the in the dataset?
+					//Do a sync of data from CognitoSync
+					let syncClient = new AWS.CognitoSyncManager();
+					syncClient.openOrCreateDataset('myTestDataSet', function(err, dataset) {
+             dataset.synchronize({
+               onSuccess: function (data, newRecords) {
+                 cb();
+               },
+               onError: function (error) {
+                 console.log(error);
+               }
+             });
+					});
+
 				});
 			},
 
