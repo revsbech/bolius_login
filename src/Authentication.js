@@ -157,6 +157,17 @@ const auth = {
 
 	},
 
+	callGetIdentity() {
+		AWS.config.credentials = this._getAwsIdentityCredentials();
+    return new Promise((resolve, reject) => {
+    	AWS.config.credentials.get((err) => {
+				if (err) {
+					reject(err);
+				}
+				resolve();
+			});
+  	});
+	},
 
 	signInFacebook(fbResponse, cb, history) {
 		let accessToken = fbResponse.accessToken;
@@ -176,7 +187,8 @@ const auth = {
 					dataset.put('name', fbResponse.name, function(err, recod) {});
 				}
 				if (fbResponse.email) {
-					dataset.put('email', fbResponse.email, function(err, record) {});
+					//dataset.put('email', fbResponse.email, function(err, record) {});
+					dataset.put('email', "jer+3@peytz.dk", function(err, record) {});
 				}
 
 				dataset.synchronize({

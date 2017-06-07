@@ -2,7 +2,6 @@ import React from "react";
 import TokenViewer from './TokenViewer';
 import { Link } from 'react-router-dom';
 import auth from '../Authentication';
-import AWS from "aws-sdk";
 import FacebookLogin from 'react-facebook-login';
 import {connect} from 'react-redux';
 
@@ -18,8 +17,6 @@ class Dashboard extends React.Component {
 		auth.getSyncedData((user) => {
 			this.setState({userDetails: user});
 		});
-
-
 
   }
 	handleSubmit(e) {
@@ -37,23 +34,12 @@ class Dashboard extends React.Component {
 	}
 
 	responseFacebook(response) {
-		AWS.config.region = "eu-central-1";
-		var jwtToken = auth.getIdTokenOfCurrentUser().getJwtToken();
+		//Make sure the access token is set, since we use that when determine which logins to use when calling AWS
 
-		//@todo Should probably be moved somewhere else, and at least read the IdentityPoolId and userPoolId
-		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-			IdentityPoolId: 'eu-central-1:623e48e1-a865-4a64-b0e1-75c9faac18bb',
-			Logins: {
-				'cognito-idp.eu-central-1.amazonaws.com/eu-central-1_gD9Sc0iLZ': jwtToken,
-				'graph.facebook.com': response.accessToken,
-			}
-    });
-
-		AWS.config.credentials.get(function(err) {
-			if (err) return console.log("Error", err);
-			alert("Facebook login: Your Cognito Identity ID is " + AWS.config.credentials.identityId)
-		});
-		/**/
+		localStorage.setItem('facebookAccessToken', response.accessToken);
+		auth.callGetIdentity().then(() => {
+			alert("Connected!!!");
+		})
 
 	}
 	render() {
