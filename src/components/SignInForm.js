@@ -4,6 +4,8 @@ import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import { updateCredentials} from '../Redux/actions';
+import { signInFacebook } from '../cognito/helpers';
 
 class SignInForm extends React.Component {
 	constructor(props) {
@@ -38,10 +40,15 @@ class SignInForm extends React.Component {
 
 		console.log(response);
 		//console.log("You are.."  + response.accessToken);
+		signInFacebook(response,  () => {
+			this.props.history.push('/dashboard');
+		}, this.props.history, this.props);
+		/*
 		auth.signInFacebook(response,  (user) => {
 			this.props.history.push('/dashboard');
 		  this.props.setUser(user);
-		}, this.props.history);
+		}, this.props.history, this.props);
+		*/
 
 	}
 
@@ -79,6 +86,6 @@ class SignInForm extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({increment, decrement, setUser}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({updateCredentials}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);
