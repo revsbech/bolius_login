@@ -4,7 +4,6 @@ import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { increment, decrement, setUser} from '../Redux/actions';
 
 class SignInForm extends React.Component {
 	constructor(props) {
@@ -73,9 +72,6 @@ class SignInForm extends React.Component {
 						/>
 
 				</form>
-				<div>{this.props.state.counter}</div>
-				<button onClick={this.props.increment}>+</button>
-				<button onClick={this.props.decrement}>-</button>
 			</div>
 		);
 	}
