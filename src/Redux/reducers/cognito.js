@@ -4,7 +4,6 @@ import {
 } from '../constants';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import AWS  from 'aws-sdk';
-import config from '../../config';
 
 // ------------------------------------
 // INITIAL STATE

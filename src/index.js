@@ -5,7 +5,6 @@ import App from './App';
 import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
-import {connect} from 'react-redux';
 import boliusLoginReducers from './Redux/reducers';
 import { cognitoInitialSetup } from './Redux/actions';
 import appConfig from './config';
