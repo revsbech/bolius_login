@@ -4,7 +4,7 @@ import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { increment, decrement } from '../Redux/actions';
+import { increment, decrement, setUser} from '../Redux/actions';
 
 class SignInForm extends React.Component {
 	constructor(props) {
@@ -39,7 +39,10 @@ class SignInForm extends React.Component {
 
 		console.log(response);
 		//console.log("You are.."  + response.accessToken);
-		auth.signInFacebook(response,  () => this.props.history.push('/dashboard'), this.props.history);
+		auth.signInFacebook(response,  (user) => {
+			this.props.history.push('/dashboard');
+		  this.props.setUser(user);
+		}, this.props.history);
 
 	}
 
@@ -80,6 +83,6 @@ class SignInForm extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({increment, decrement}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({increment, decrement, setUser}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);

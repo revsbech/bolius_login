@@ -1,7 +1,6 @@
 import {
 	SET_USER
 } from '../actionConstants';
-import { assign } from 'lodash/assign';
 
 // ------------------------------------
 // INITIAL STATE
@@ -15,7 +14,7 @@ export const initialState = {
 // ------------------------------------
 const ACTION_HANDLERS = {
 	[SET_USER]: (state, action) => {
-		return assign({}, state, {
+		return Object.assign({}, state, {
 			user: action.payload.user
 		});
 	}

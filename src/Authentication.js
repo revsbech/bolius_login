@@ -169,6 +169,7 @@ const auth = {
 	},
 
 	signInFacebook(fbResponse, cb, history) {
+
 		let accessToken = fbResponse.accessToken;
 		//Store facebook token in local storage to make it aveailble for the _getAwsIdentityCredentials
 		localStorage.setItem('facebookAccessToken', accessToken);
@@ -182,15 +183,34 @@ const auth = {
 				}
 				if (fbResponse.email) {
 					dataset.put('email', fbResponse.email, function(err, record) {});
-					//dataset.put('email', "jer+4@peytz.dk", function(err, record) {});
+					//dataset.put('email', "jer+5@peytz.dk", function(err, record) {});
 				}
-
 				dataset.synchronize({
 					onSuccess: function (data, newRecords) {
-						cb();
+						data.getAllRecords(function (err, record) {
+							let user = {};
+							for (var i=0, l=record.length; i<l; i++) {
+								user[record[i]["key"]] = record[i]["value"];
+							}
+
+							if (cb && typeof cb === 'function') {
+								cb(user);
+							}
+						});
+
 					},
 					onError: function(error) {
+						console.log("Error syncing data after facebook login");
 						console.log(error);
+					},
+					onConflict: function(dataset, conflicts, callback) {
+						var resolved = [];
+						for (var i=0; i<conflicts.length; i++) {
+							resolved.push(conflicts[i].resolveWithRemoteRecord());
+						}
+						dataset.resolve(resolved, function() {
+							return callback(true);
+						});
 					}
 				});
 			});

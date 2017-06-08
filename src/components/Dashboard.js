@@ -14,9 +14,11 @@ class Dashboard extends React.Component {
     	userDetails: {},
 			openIdToken: ""
     };
+
 		auth.getSyncedData((user) => {
 			this.setState({userDetails: user});
 		});
+		/**/
 
   }
 	handleSubmit(e) {
@@ -43,6 +45,7 @@ class Dashboard extends React.Component {
 
 	}
 	render() {
+		console.log(this.props.state.user.user);
 		return (
 			<div className="wrapper">
 				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
