@@ -1,10 +1,11 @@
 import React from 'react';
-import {Route, Redirect} from 'react-router-dom';
+import {Route, Redirect, withRouter} from 'react-router-dom';
 import auth from './Authentication';
+import {connect} from 'react-redux';
 
 const AuthRoute = ({ component: Component, ...rest }) => (
 	<Route {...rest} render={props => (
-		auth.userHasValidIdentitySession() ? (
+		auth.userHasValidIdentitySession({props, ...rest}) ? (
 			<Component {...props}/>
 		) : (
 			<Redirect to={{
@@ -15,4 +16,6 @@ const AuthRoute = ({ component: Component, ...rest }) => (
 	)}/>
 );
 
-export default AuthRoute;
+const mapStateToProps = (state) => ({state});
+
+export default withRouter(connect(mapStateToProps)(AuthRoute));
