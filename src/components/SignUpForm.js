@@ -44,7 +44,6 @@ class SignUpForm extends React.Component {
 						   onChange={this.handlePasswordChange.bind(this)}/>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn"/>
 				</form>
-				<div>Counter state: {this.props.state.counter}</div>
 			</div>
 		);
 	}

@@ -45,7 +45,6 @@ class Dashboard extends React.Component {
 
 	}
 	render() {
-		console.log(this.props.state.user.user);
 		return (
 			<div className="wrapper">
 				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
@@ -63,7 +62,6 @@ class Dashboard extends React.Component {
 				textButton="Tilknyt facebook"
 		    />
 					<TokenViewer token={this.state.openIdToken} />
-					<div>Counter state: {this.props.state.counter}</div>
 				</form>
 			</div>
 		);
