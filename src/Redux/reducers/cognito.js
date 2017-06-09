@@ -1,4 +1,5 @@
 import {
+	LOGOUT,
 	UPDATE_CREDS,
 	COGNITO_INITIAL_SETUP
 } from '../constants';
@@ -42,6 +43,12 @@ const ACTION_HANDLERS = {
 	[UPDATE_CREDS]: (state, action) => {
 		return Object.assign({}, state, {
 			credentials: action.payload.credentials
+		});
+	},
+	[LOGOUT]: (state, action) => {
+		return Object.assign({}, state, {
+			credentials: null,
+			user: null
 		});
 	}
 };

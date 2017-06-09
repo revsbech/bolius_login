@@ -1,4 +1,5 @@
 import {
+	LOGOUT,
 	UPDATE_CREDS,
 	COGNITO_INITIAL_SETUP
 } from './constants';
@@ -10,7 +11,7 @@ export function updateCredentials(credentials) {
 		payload: {
 			credentials
 		}
-	}
+	};
 }
 
 export function cognitoInitialSetup(config) {
@@ -19,5 +20,10 @@ export function cognitoInitialSetup(config) {
 		payload: {
 			config
 		}
-	}
+	};
 }
+
+
+export const logout = () => ({
+	type: LOGOUT
+});

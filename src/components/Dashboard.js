@@ -3,7 +3,9 @@ import TokenViewer from './TokenViewer';
 import { Link } from 'react-router-dom';
 import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { logout } from '../Redux/actions';
 
 
 class Dashboard extends React.Component {
@@ -23,6 +25,7 @@ class Dashboard extends React.Component {
   }
 	handleSubmit(e) {
 		e.preventDefault();
+		this.props.logout();
 		auth.signOut(() => this.props.history.push('/signin') );
 	}
 
@@ -70,5 +73,7 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ logout }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 
