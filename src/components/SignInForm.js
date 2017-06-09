@@ -76,17 +76,17 @@ class SignInForm extends React.Component {
 												 placeholder="Password"
 												 onChange={this.handlePasswordChange.bind(this)}/>
 									</div>
-									<button type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn text-uppercase">Log ind</button>
 									<div className="row actions">
-										<div className="col-6 text-left">
-											<Link to="/signup">Registrer ny bruger</Link>
+										<div className="col-6 text-center">
+											<Link to="/signup" className="text-uppercase">Registrer</Link>
 										</div>
-										<div className="col-6 text-right">
-											<Link to="/forgot-password">Glemt adgangskode</Link>
+										<div className="col-6">
+											<button type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn text-uppercase">Log ind</button>
 										</div>
 									</div>
 
 									<hr />
+									<p className="text-center">Eller log ind med</p>
 									<div className="social-login">
 										<FacebookLogin
 											appId="294138207713667"
@@ -104,6 +104,11 @@ class SignInForm extends React.Component {
 									</div>
 
 								</form>
+							</div>
+						</div>
+						<div className="row">
+							<div className="col-12 forgot-password text-center">
+								<Link to="/forgot-password">Glemt adgangskode?</Link>
 							</div>
 						</div>
 					</div>
