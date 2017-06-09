@@ -1,0 +1,211 @@
+$fa-font-path: '../node_modules/font-awesome/fonts';
+
+@import '../node_modules/font-awesome/scss/font-awesome.scss';
+
+@import './shared.scss';
+
+html, body {
+  background: $bg-secondary;
+  font-family: $font-default;
+  color: $font-color-primary;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+}
+
+.back > a{
+  color: #fff;
+  font-size: 0.85em;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-transform: uppercase;
+
+  &:before {
+    @extend .fa;
+    content: $fa-var-angle-left;
+    margin-right: 10px;
+  }
+}
+
+form {
+  background: $bg-primary;
+  padding: 20px 30px;
+
+  a {
+    color: $link-color;
+    &:hover, &:focus {
+      color: $link-color-hover;
+    }
+  }
+
+  .logo {
+    display: block;
+    height: 60px;
+    background: url($logo) no-repeat center center;
+  }
+
+  .btn, .form-control {
+    border-radius: 0;
+  }
+
+  .btn-primary {
+    background: $link-color;
+    border-color: $link-color;
+    &:hover, &:focus {
+      background: $link-color-hover;
+      border-color: $link-color-hover;
+    }
+  }
+
+  .form-control {
+    &:focus {
+      border-color: $link-color;
+    }
+  }
+
+  .actions {
+    a {
+      font-size: 0.85em;
+    }
+  }
+
+  .social-login {
+    text-align: center;
+
+    a,
+    span > a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: $bg-secondary;
+      margin: 0 10px;
+      -webkit-appearance: inherit;
+
+      &:before {
+        @extend .fa;
+        line-height: 40px;
+        color: #FFF;
+      }
+
+      &.facebook {
+        background: #3b5998;
+        &:before { content: $fa-var-facebook; }
+        &:hover, &:focus {
+          background: #4c70ba;
+        }
+      }
+
+      &.twitter {
+        background: #55acee;
+        &:before { content: $fa-var-twitter; }
+        &:hover, &:focus {
+          background: #83c3f3;
+        }
+      }
+
+      &.google {
+        background: #dd4b39;
+        &:before { content: $fa-var-google; }
+        &:hover, &:focus {
+          background: #e47365;
+        }
+      }
+
+      &.linkedin {
+        background: #0976b4;
+        &:before { content: $fa-var-linkedin; }
+        &:hover, &:focus {
+          background: #0b96e5;
+        }
+      }
+    }
+  }
+}
+
+/*
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+body {
+  background: #eee !important;
+}
+
+.wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.form-signin-heading,
+.checkbox {
+  margin-bottom: 30px;
+}
+
+.checkbox {
+  font-weight: normal;
+}
+
+.form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+   z-index: 2;
+ }
+
+
+input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+input[type="password"] {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.sign-in-btn {
+  margin-top: 30px;
+}*/

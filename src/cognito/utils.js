@@ -41,6 +41,25 @@ export const getIdTokenOfCurrentUser = userPool => {
 	});
 };
 
+/**
+ *
+ * @param state
+ * @returns {{}} - Object with current login tokens
+ */
+export const getLoginsFromLocallyStoredAccessTokens = (state, appConfig) => {
+	let logins = {};
+	if (userHasValidUserpoolSession(state.cognito.userPool)) {
+		let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
+		logins[cognitoKey] = getIdTokenOfCurrentUser(state.cognito.userPool).getJwtToken();
+	}
+
+	let facebookAccessToken = localStorage.getItem('facebookAccessToken');
+	if (facebookAccessToken && facebookAccessToken !== "null") {
+		logins['graph.facebook.com'] = facebookAccessToken
+	}
+	return logins;
+};
+
 
 export const getOpenIdTokenForCurrentUser = (props) => {
 	console.log('props', props);
@@ -63,23 +82,4 @@ export const getOpenIdTokenForCurrentUser = (props) => {
 		});
 
 	});
-};
-
-/**
- *
- * @param state
- * @returns {{}} - Object with current login tokens
- */
-export const getLoginsFromLocallyStoredAccessTokens = (state, appConfig) => {
-	let logins = {};
-	if (userHasValidUserpoolSession(state.cognito.userPool)) {
-		let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
-		logins[cognitoKey] = getIdTokenOfCurrentUser(state.cognito.userPool).getJwtToken();
-	}
-
-	let facebookAccessToken = localStorage.getItem('facebookAccessToken');
-	if (facebookAccessToken && facebookAccessToken !== "null") {
-		logins['graph.facebook.com'] = facebookAccessToken
-	}
-	return logins;
 };
