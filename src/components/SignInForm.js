@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { increment, decrement, setUser} from '../Redux/actions';
 
+
 class SignInForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -48,34 +49,65 @@ class SignInForm extends React.Component {
 
 	render() {
 		return (
-			<div className="wrapper">
-				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
-					<h2 className="form-signin-heading">Sign in</h2>
-					<input type="text"
-						   className="form-control"
-						   value={this.state.email}
-						   placeholder="Email"
-						   onChange={this.handleEmailChange.bind(this)}/>
-					<input type="password"
-						   className="form-control"
-						   value={this.state.password}
-						   placeholder="Password"
-						   onChange={this.handlePasswordChange.bind(this)}/>
-					<Link to="/signup">Register new user?</Link>
-					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn"/>
-				<hr />
-				<FacebookLogin
-						appId="294138207713667"
-						autoLoad={false}
-						fields="name,email,picture"
-						callback={this.handleFacebookLogin.bind(this)}
-						textButton="Login med facebook"
-						/>
+			<div>
+				<div className="back">
+					<a href="http://www.bolius.dk/">Tilbage til Bolius</a>
+				</div>
+				<div className="vertical-center">
+					<div className="container">
+						<div className="row">
+							<div className="col-lg-4 offset-lg-4 col-md-6 offset-lg-3">
+								<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
+									<span className="logo"></span>
+									<p className="text-center">
+										Log ind med din Bolius-profil
+									</p>
+									<div className="form-group">
+										<input type="text"
+												 className="form-control"
+												 value={this.state.email}
+												 placeholder="Email"
+												 onChange={this.handleEmailChange.bind(this)}/>
+									</div>
+									<div className="form-group">
+										<input type="password"
+												 className="form-control"
+												 value={this.state.password}
+												 placeholder="Password"
+												 onChange={this.handlePasswordChange.bind(this)}/>
+									</div>
+									<button type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn text-uppercase">Log ind</button>
+									<div className="row actions">
+										<div className="col-sm-6 text-left">
+											<Link to="/signup">Registrer ny bruger</Link>
+										</div>
+										<div className="col-sm-6 text-right">
+											<Link to="/forgot-password">Glemt adgangskode</Link>
+										</div>
+									</div>
 
-				</form>
-				<div>{this.props.state.counter}</div>
-				<button onClick={this.props.increment}>+</button>
-				<button onClick={this.props.decrement}>-</button>
+									<hr />
+									<div className="social-login">
+										<FacebookLogin
+											appId="294138207713667"
+											cssClass="facebook"
+											autoLoad={false}
+											fields="name,email,picture"
+											callback={this.handleFacebookLogin.bind(this)}
+											textButton=""
+											tag="a"
+										/>
+
+										<a href="" className="twitter"></a>
+										<a href="" className="google"></a>
+										<a href="" className="linkedin"></a>
+									</div>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
