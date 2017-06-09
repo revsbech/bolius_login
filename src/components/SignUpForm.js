@@ -29,22 +29,39 @@ class SignUpForm extends React.Component {
 
 	render() {
 		return (
-			<div className="wrapper">
-				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
-					<h2 className="form-signin-heading">Please Sign up</h2>
-					<input type="text"
-						   className="form-control"
-						   value={this.state.email}
-						   placeholder="Email"
-						   onChange={this.handleEmailChange.bind(this)}/>
-					<input type="password"
-						   className="form-control"
-						   value={this.state.password}
-						   placeholder="Password"
-						   onChange={this.handlePasswordChange.bind(this)}/>
-					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn"/>
-				</form>
-				<div>Counter state: {this.props.state.counter}</div>
+			<div>
+				<div className="back">
+					<a href="http://www.bolius.dk/">Tilbage til Bolius</a>
+				</div>
+				<div className="vertical-center">
+					<div className="container">
+						<div className="row">
+							<div className="col-xs-4 offset-xs-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-12">
+								<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
+									<span className="logo"></span>
+									<p className="text-center">
+										Opret en Bolius-profil
+									</p>
+									<div className="form-group">
+										<input type="text"
+												 className="form-control"
+												 value={this.state.email}
+												 placeholder="Email"
+												 onChange={this.handleEmailChange.bind(this)}/>
+									</div>
+									<div className="form-group">
+										<input type="password"
+												 className="form-control"
+												 value={this.state.password}
+												 placeholder="Password"
+												 onChange={this.handlePasswordChange.bind(this)}/>
+									</div>
+									<button type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn">Registrer</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
