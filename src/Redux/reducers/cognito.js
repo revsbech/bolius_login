@@ -10,8 +10,9 @@ import AWS  from 'aws-sdk';
 // INITIAL STATE
 // ------------------------------------
 const initialState = {
-	credentials: {},
-	userPool: {}
+	credentials: null,
+	userPool: null,
+	user: null
 };
 
 
