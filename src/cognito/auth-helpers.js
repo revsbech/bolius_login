@@ -1,16 +1,7 @@
 import appConfig from '../config';
 import AWS  from "aws-sdk";
 import { getLoginsFromLocallyStoredAccessTokens } from './utils';
-import { updateCredentials} from '../Redux/actions';
-
-
-export const signInFacebook = (fbResponse, cb, history, props) => {
-	let accessToken = fbResponse.accessToken;
-
-	//Store facebook token in local storage to make it aveailble for the _getAwsIdentityCredentials
-	localStorage.setItem('facebookAccessToken', accessToken);
-	history.push('/dashboard')
-};
+import { updateCredentials } from '../Redux/actions';
 
 
 export const userHasValidIdentitySession = (props) => {
@@ -50,3 +41,29 @@ export const userHasValidIdentitySession = (props) => {
 
 	}
 };
+
+export const signOut = (props) => {
+	// Remove the facebook access token stored locally
+	localStorage.removeItem('facebookAccessToken');
+
+	// If signed in with username/password, log out of cognito UserPool
+	let cognitoUser = props.state.cognito.user;
+	if (cognitoUser) {
+		cognitoUser.signOut();
+	}
+
+	// Clear state in store
+	props.logout();
+
+	// Redirect to signin
+	props.history.push('/signin');
+};
+
+export const callGetIdentity = (state) => {
+	console.log('state', state);
+
+	let creds = state.cognito.credentials;
+	return creds.getPromise();
+};
+
+
