@@ -59,11 +59,12 @@ export const signOut = (props) => {
 	props.history.push('/signin');
 };
 
-export const callGetIdentity = (state) => {
-	console.log('state', state);
 
-	let creds = state.cognito.credentials;
-	return creds.getPromise();
+export const getCredentials = (state, appConfig) => {
+	return new AWS.CognitoIdentityCredentials({
+		IdentityPoolId: appConfig.IdentityPoolId,
+		Logins: getLoginsFromLocallyStoredAccessTokens(state, appConfig)
+	});
 };
 
 
