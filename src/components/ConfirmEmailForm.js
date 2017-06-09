@@ -1,5 +1,6 @@
 import React from "react";
-import auth from '../Authentication';
+import { connect } from 'react-redux';
+import { confirmEmail } from '../cognito/user-pool';
 
 class ConfirmEmailForm extends React.Component {
 	constructor(props) {
@@ -23,7 +24,7 @@ class ConfirmEmailForm extends React.Component {
 		const confirmationCode = this.state.confirmationCode.trim();
 		const email = this.state.email.trim();
 
-		auth.confirmEmail(email, confirmationCode, () => this.props.history.push('/dashboard'));
+		confirmEmail(email, confirmationCode, this.props);
 	}
 
 	render() {
@@ -49,4 +50,6 @@ class ConfirmEmailForm extends React.Component {
 	}
 }
 
-export default ConfirmEmailForm;
+const mapStateToProps = (state) => ({state});
+
+export default connect(mapStateToProps)(ConfirmEmailForm);

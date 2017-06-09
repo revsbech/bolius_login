@@ -1,11 +1,14 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import { updateCredentials} from '../Redux/actions';
-import { signInFacebook } from '../cognito/helpers';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+	updateUser,
+	updateCredentials
+} from '../Redux/actions';
+import { signInFacebook } from '../cognito/facebook';
+import { signIn } from '../cognito/user-pool';
 
 class SignInForm extends React.Component {
 	constructor(props) {
@@ -30,7 +33,7 @@ class SignInForm extends React.Component {
 		const password = this.state.password.trim();
 
 		localStorage.setItem('cognitoUserEmail', email);
-		auth.signIn(email, password, () => this.props.history.push('/dashboard'), this.props.history);
+		signIn(email, password, this.props);
 	}
 
 	handleFacebookLogin(response) {
@@ -43,13 +46,6 @@ class SignInForm extends React.Component {
 		signInFacebook(response,  () => {
 			this.props.history.push('/dashboard');
 		}, this.props.history, this.props);
-		/*
-		auth.signInFacebook(response,  (user) => {
-			this.props.history.push('/dashboard');
-		  this.props.setUser(user);
-		}, this.props.history, this.props);
-		*/
-
 	}
 
 	render() {
@@ -77,7 +73,6 @@ class SignInForm extends React.Component {
 						callback={this.handleFacebookLogin.bind(this)}
 						textButton="Login med facebook"
 						/>
-
 				</form>
 			</div>
 		);
@@ -86,6 +81,6 @@ class SignInForm extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({updateCredentials}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ updateUser, updateCredentials }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);

@@ -1,10 +1,13 @@
 import React from "react";
-import auth from '../Authentication';
+import { deleteUser } from '../cognito/user-pool';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { logout } from '../Redux/actions';
 
 class DeleteUser extends React.Component {
 	handleSubmit(e) {
 		e.preventDefault();
-		auth.deleteUser(() => this.props.history.push('/signin'));
+		deleteUser(this.props);
 	}
 
 	render() {
@@ -20,4 +23,8 @@ class DeleteUser extends React.Component {
 	}
 }
 
-export default DeleteUser;
+const mapStateToProps = (state) => ({state});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({ logout }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeleteUser);
