@@ -1,3 +1,6 @@
+import appConfig from '../config';
+import AWS  from "aws-sdk";
+
 /**
  *
  * @param userPool
@@ -35,6 +38,30 @@ export const getIdTokenOfCurrentUser = userPool => {
 		}
 
 		return session.getIdToken();
+	});
+};
+
+
+export const getOpenIdTokenForCurrentUser = (props) => {
+	console.log('props', props);
+	console.log('props id', props.state.cognito.credentials.identityId);
+
+	let id = props.state.cognito.credentials.identityId;
+	let params = {
+		IdentityId: id,
+		Logins: getLoginsFromLocallyStoredAccessTokens(props.state, appConfig)
+	};
+
+	return new Promise((resolve, reject) => {
+		let cognitoidentity  = new AWS.CognitoIdentity();
+		cognitoidentity.getOpenIdToken(params, function(err,data) {
+			//@todo handle if err != null (call reject)
+			if (err != null) {
+				reject(err);
+			}
+			resolve(data.Token);
+		});
+
 	});
 };
 
