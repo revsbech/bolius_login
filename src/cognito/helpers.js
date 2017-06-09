@@ -31,9 +31,6 @@ export const userHasValidIdentitySession = (props) => {
 			props.history.push('/signin');
 		});
 	} else {
-		let currentLoginsFromLocalStorage = getLoginsFromLocallyStoredAccessTokens(props.state, appConfig);
-		console.log('currentLoginsFromLocalStorage', currentLoginsFromLocalStorage);
-
 		let creds = new AWS.CognitoIdentityCredentials({
 			IdentityPoolId: appConfig.IdentityPoolId,
 			Logins: getLoginsFromLocallyStoredAccessTokens(props.state, appConfig)
