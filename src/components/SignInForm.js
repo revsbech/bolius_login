@@ -56,7 +56,7 @@ class SignInForm extends React.Component {
 				<div className="vertical-center">
 					<div className="container">
 						<div className="row">
-							<div className="col-lg-4 offset-lg-4 col-md-6 offset-lg-3">
+							<div className="col-xs-4 offset-xs-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-12">
 								<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
 									<span className="logo"></span>
 									<p className="text-center">
@@ -78,10 +78,10 @@ class SignInForm extends React.Component {
 									</div>
 									<button type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn text-uppercase">Log ind</button>
 									<div className="row actions">
-										<div className="col-sm-6 text-left">
+										<div className="col-6 text-left">
 											<Link to="/signup">Registrer ny bruger</Link>
 										</div>
-										<div className="col-sm-6 text-right">
+										<div className="col-6 text-right">
 											<Link to="/forgot-password">Glemt adgangskode</Link>
 										</div>
 									</div>
