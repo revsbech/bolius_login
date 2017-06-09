@@ -1,10 +1,11 @@
 import React from 'react';
-import {Route, Redirect} from 'react-router-dom';
-import auth from './Authentication';
+import {Route, Redirect, withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
+import { userHasValidIdentitySession } from './cognito/auth-helpers';
 
 const AuthRoute = ({ component: Component, ...rest }) => (
 	<Route {...rest} render={props => (
-		auth.userHasValidIdentitySession() ? (
+		userHasValidIdentitySession({props, ...rest}) ? (
 			<Component {...props}/>
 		) : (
 			<Redirect to={{
@@ -15,4 +16,6 @@ const AuthRoute = ({ component: Component, ...rest }) => (
 	)}/>
 );
 
-export default AuthRoute;
+const mapStateToProps = (state) => ({state});
+
+export default withRouter(connect(mapStateToProps)(AuthRoute));

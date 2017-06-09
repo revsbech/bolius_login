@@ -1,35 +1,33 @@
 import React from "react";
 import TokenViewer from './TokenViewer';
 import { Link } from 'react-router-dom';
-import auth from '../Authentication';
+import appConfig from '../config';
 import FacebookLogin from 'react-facebook-login';
-import {connect} from 'react-redux';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { logout, updateCredentials } from '../Redux/actions';
+import { signOut, getCredentials } from '../cognito/auth-helpers';
+import { getOpenIdTokenForCurrentUser,  } from '../cognito/utils';
 
 class Dashboard extends React.Component {
 
 	constructor() {
-    super();
-    this.state = {
-    	userDetails: {},
+		super();
+		this.state = {
+			userDetails: {},
 			openIdToken: ""
-    };
+		};
+	}
 
-		auth.getSyncedData((user) => {
-			this.setState({userDetails: user});
-		});
-		/**/
-
-  }
 	handleSubmit(e) {
 		e.preventDefault();
-		auth.signOut(() => this.props.history.push('/signin') );
+		signOut(this.props);
 	}
 
 	handleCreateIdentity(e) {
 		e.preventDefault();
 		console.log("Fetching id");
-		auth.getOpenIdTokenForCurrentUser().then((token) => {
+		getOpenIdTokenForCurrentUser(this.props).then((token) => {
 			console.log(token);
 			this.setState({openIdToken: token});
 		});
@@ -37,33 +35,43 @@ class Dashboard extends React.Component {
 
 	responseFacebook(response) {
 		//Make sure the access token is set, since we use that when determine which logins to use when calling AWS
-
 		localStorage.setItem('facebookAccessToken', response.accessToken);
-		auth.callGetIdentity().then(() => {
-			alert("Connected!!!");
-		})
 
+		let creds = getCredentials(this.props.state, appConfig);
+
+		creds.getPromise().then(() => {
+
+			// Update credentials in the store
+			this.props.updateCredentials(creds);
+
+			alert('Connected!');
+		}, err => {
+			console.log('err', err);
+		});
 	}
+
 	render() {
-		console.log(this.props.state.user.user);
 		return (
 			<div className="wrapper">
 				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
-					<h2 className="form-signin-heading">Hep {this.state.userDetails.name}, you are perfectly signed in :)</h2>
-			<p><a target="blank" href={'http://localhost/index.php?id=37&logintype=login&cognito_id_token=' + this.state.openIdToken}>Login to bolius (Test-link)</a></p>
+					<h2 className="form-signin-heading">Hep {this.state.userDetails.name}, you are perfectly signed in
+						:)</h2>
+					<p><a target="blank"
+						  href={'http://localhost/index.php?id=37&logintype=login&cognito_id_token=' + this.state.openIdToken}>Login
+						to bolius (Test-link)</a></p>
 					<Link to="/delete-user">Delete user?</Link>
-			<p><a href="#" onClick={this.handleCreateIdentity.bind(this)} >Fetch OpenID Token for further validation</a></p>
+					<p><a href="#" onClick={this.handleCreateIdentity.bind(this)}>Fetch OpenID Token for further
+						validation</a></p>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Sign out"/>
-			<hr />
-		<FacebookLogin
-		    appId="294138207713667"
-		    autoLoad={false}
-		    fields="name,email,picture"
-		    callback={this.responseFacebook}
-				textButton="Tilknyt facebook"
-		    />
-					<TokenViewer token={this.state.openIdToken} />
-					<div>Counter state: {this.props.state.counter}</div>
+					<hr />
+					<FacebookLogin
+						appId="294138207713667"
+						autoLoad={false}
+						fields="name,email,picture"
+						callback={this.responseFacebook.bind(this)}
+						textButton="Tilknyt facebook"
+					/>
+					<TokenViewer token={this.state.openIdToken}/>
 				</form>
 			</div>
 		);
@@ -72,5 +80,7 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ logout, updateCredentials }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

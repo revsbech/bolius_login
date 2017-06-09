@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
-import user from './user';
+import cognito from './cognito';
 
 const boliusLoginReducers = combineReducers({
-	counter,
-	user
+	cognito
 });
 
 export default boliusLoginReducers

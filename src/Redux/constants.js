@@ -1,0 +1,4 @@
+export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_CREDS = 'UPDATE_CREDS';
+export const LOGOUT = 'LOGOUT';
+export const COGNITO_INITIAL_SETUP = 'COGNITO_INITIAL_SETUP';

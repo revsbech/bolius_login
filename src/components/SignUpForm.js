@@ -1,6 +1,6 @@
 import React from "react";
-import auth from '../Authentication';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { signUp } from '../cognito/user-pool';
 
 class SignUpForm extends React.Component {
 	constructor(props) {
@@ -24,7 +24,7 @@ class SignUpForm extends React.Component {
 		const email = this.state.email.trim();
 		const password = this.state.password.trim();
 
-		auth.signUp(email, password, () => this.props.history.push('/confirm-email'));
+		signUp(email, password, this.props);
 	}
 
 	render() {

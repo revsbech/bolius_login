@@ -1,26 +1,39 @@
 import {
-	INCREMENT,
-	DECREMENT,
-	SET_USER
-} from './actionConstants';
+	LOGOUT,
+	UPDATE_USER,
+	UPDATE_CREDS,
+	COGNITO_INITIAL_SETUP
+} from './constants';
 
-export function increment() {
+
+export function updateCredentials(credentials) {
 	return {
-		type: INCREMENT
-	}
+		type: UPDATE_CREDS,
+		payload: {
+			credentials
+		}
+	};
 }
 
-export function decrement() {
+export function updateUser(user) {
 	return {
-		type: DECREMENT
-	}
-}
-
-export function setUser(user) {
-	return {
-		type: SET_USER,
+		type: UPDATE_USER,
 		payload: {
 			user
 		}
-	}
+	};
 }
+
+export function cognitoInitialSetup(config) {
+	return {
+		type: COGNITO_INITIAL_SETUP,
+		payload: {
+			config
+		}
+	};
+}
+
+
+export const logout = () => ({
+	type: LOGOUT
+});

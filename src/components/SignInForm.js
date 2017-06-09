@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import auth from '../Authentication';
 import FacebookLogin from 'react-facebook-login';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import { increment, decrement, setUser} from '../Redux/actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+	updateUser,
+	updateCredentials
+} from '../Redux/actions';
+import { signInFacebook } from '../cognito/facebook';
+import { signIn } from '../cognito/user-pool';
 
 
 class SignInForm extends React.Component {
@@ -30,7 +34,7 @@ class SignInForm extends React.Component {
 		const password = this.state.password.trim();
 
 		localStorage.setItem('cognitoUserEmail', email);
-		auth.signIn(email, password, () => this.props.history.push('/dashboard'), this.props.history);
+		signIn(email, password, this.props);
 	}
 
 	handleFacebookLogin(response) {
@@ -40,11 +44,9 @@ class SignInForm extends React.Component {
 
 		console.log(response);
 		//console.log("You are.."  + response.accessToken);
-		auth.signInFacebook(response,  (user) => {
+		signInFacebook(response,  () => {
 			this.props.history.push('/dashboard');
-		  this.props.setUser(user);
-		}, this.props.history);
-
+		}, this.props.history, this.props);
 	}
 
 	render() {
@@ -115,6 +117,6 @@ class SignInForm extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({increment, decrement, setUser}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ updateUser, updateCredentials }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);
