@@ -14,5 +14,5 @@
 .env
 npm-debug.log*
 .idea
-
+src/*.css
 
