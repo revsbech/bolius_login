@@ -1,5 +1,6 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router'
 import AuthRoute from './AuthRoute';
 import SignUpForm from './components/SignUpForm';
 import SignInForm from './components/SignInForm';
@@ -10,8 +11,8 @@ import DeleteUser from './components/DeleteUser';
 import {connect} from 'react-redux';
 
 
-const AppRouter = () => (
-	<Router>
+const AppRouter = ({ history }) => (
+	<ConnectedRouter history={history}>
 		<div>
 			<Route exact path="/" component={Frontpage} ></Route>
 			<Route path="/signin" component={SignInForm} ></Route>
@@ -20,7 +21,7 @@ const AppRouter = () => (
 			<AuthRoute path="/dashboard" component={Dashboard}/>
 			<AuthRoute path="/delete-user" component={DeleteUser}/>
 		</div>
-	</Router>
+	</ConnectedRouter>
 );
 
 

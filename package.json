@@ -6,6 +6,7 @@
     "amazon-cognito-identity-js": "^1.17.0",
     "amazon-cognito-js": "^1.1.0",
     "aws-sdk": "^2.56.0",
+    "connected-react-router": "^4.2.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "react": "^15.5.4",
@@ -15,7 +16,8 @@
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
-    "redux-devtools-extension": "^2.13.2"
+    "redux-devtools-extension": "^2.13.2",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "font-awesome": "^4.7.0",

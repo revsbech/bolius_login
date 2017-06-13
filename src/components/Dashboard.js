@@ -1,12 +1,12 @@
 import React from "react";
 import TokenViewer from './TokenViewer';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import appConfig from '../config';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { logout, updateCredentials } from '../Redux/actions';
-import { signOut, getCredentials } from '../cognito/auth-helpers';
+import { signOut, getCredentialsFromLocalStorage } from '../cognito/auth-helpers';
 import { getOpenIdTokenForCurrentUser,  } from '../cognito/utils';
 
 class Dashboard extends React.Component {
@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
 		//Make sure the access token is set, since we use that when determine which logins to use when calling AWS
 		localStorage.setItem('facebookAccessToken', response.accessToken);
 
-		let creds = getCredentials(this.props.state, appConfig);
+		let creds = getCredentialsFromLocalStorage(this.props.state, appConfig);
 
 		creds.getPromise().then(() => {
 
@@ -82,5 +82,5 @@ const mapStateToProps = (state) => ({state});
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({ logout, updateCredentials }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
 

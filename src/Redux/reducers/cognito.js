@@ -2,7 +2,11 @@ import {
 	LOGOUT,
 	UPDATE_USER,
 	UPDATE_CREDS,
-	COGNITO_INITIAL_SETUP
+	COGNITO_INITIAL_SETUP,
+	GET_CREDENTIALS_REQUEST,
+	GET_CREDENTIALS_SUCCESS,
+	GET_CREDENTIALS_ERROR,
+	LOGOUT_USER
 } from '../constants';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import AWS  from 'aws-sdk';
@@ -13,7 +17,9 @@ import AWS  from 'aws-sdk';
 const initialState = {
 	credentials: null,
 	userPool: null,
-	user: null
+	user: null,
+	isAuthenticating: false,
+	errorMessage: null
 };
 
 
@@ -52,9 +58,32 @@ const ACTION_HANDLERS = {
 			credentials: action.payload.credentials
 		});
 	},
+	[GET_CREDENTIALS_REQUEST]: (state, action) => {
+		return Object.assign({}, state, {
+			isAuthenticating: true
+		});
+	},
+	[GET_CREDENTIALS_SUCCESS]: (state, action) => {
+		return Object.assign({}, state, {
+			isAuthenticating: false,
+			credentials: action.payload.creds
+		});
+	},
+	[GET_CREDENTIALS_ERROR]: (state, action) => {
+		return Object.assign({}, state, {
+			isAuthenticating: false,
+			errorMessage: action.payload.error
+		});
+	},
 	[LOGOUT]: (state, action) => {
 		return Object.assign({}, state, {
 			credentials: null,
+			user: null,
+			isAuthenticating: false
+		});
+	},
+	[LOGOUT_USER]: (state, action) => {
+		return Object.assign({}, state, {
 			user: null
 		});
 	}

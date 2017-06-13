@@ -1,21 +1,24 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
 	updateUser,
-	updateCredentials
+	updateCredentials,
+	getCredentials
 } from '../Redux/actions';
 import { signInFacebook } from '../cognito/facebook';
 import { signIn } from '../cognito/user-pool';
+import appConfig from '../config';
+import { getCredentialsFromLocalStorage } from '../cognito/auth-helpers';
 
 
 class SignInForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: localStorage.getItem('cognitoUserEmail') || '',
+			email: localStorage.getItem(`CognitoIdentityServiceProvider.${appConfig.ClientId}.LastAuthUser`) || '',
 			password: ''
 		};
 	}
@@ -33,7 +36,6 @@ class SignInForm extends React.Component {
 		const email = this.state.email.trim();
 		const password = this.state.password.trim();
 
-		localStorage.setItem('cognitoUserEmail', email);
 		signIn(email, password, this.props);
 	}
 
@@ -42,11 +44,16 @@ class SignInForm extends React.Component {
 			return;
 		}
 
-		console.log(response);
-		//console.log("You are.."  + response.accessToken);
-		signInFacebook(response,  () => {
+		let accessToken = response.accessToken;
+
+		//Store facebook token in local storage to make it aveailble for the _getAwsIdentityCredentials
+		localStorage.setItem('facebookAccessToken', accessToken);
+
+		let creds = getCredentialsFromLocalStorage(this.props.state, appConfig);
+
+		this.props.getCredentials(creds).then(() => {
 			this.props.history.push('/dashboard');
-		}, this.props.history, this.props);
+		}).catch((err) => { console.log('err', err); });
 	}
 
 	render() {
@@ -122,6 +129,6 @@ class SignInForm extends React.Component {
 
 const mapStateToProps = (state) => ({state});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ updateUser, updateCredentials }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ updateUser, updateCredentials, getCredentials }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignInForm));

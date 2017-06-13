@@ -62,9 +62,6 @@ export const getLoginsFromLocallyStoredAccessTokens = (state, appConfig) => {
 
 
 export const getOpenIdTokenForCurrentUser = (props) => {
-	console.log('props', props);
-	console.log('props id', props.state.cognito.credentials.identityId);
-
 	let id = props.state.cognito.credentials.identityId;
 	let params = {
 		IdentityId: id,

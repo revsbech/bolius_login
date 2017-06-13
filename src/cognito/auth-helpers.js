@@ -1,8 +1,7 @@
 import appConfig from '../config';
 import AWS  from "aws-sdk";
 import { getLoginsFromLocallyStoredAccessTokens } from './utils';
-import { updateCredentials } from '../Redux/actions';
-
+import { updateCredentials, getCredentials, logout } from '../Redux/actions';
 
 export const userHasValidIdentitySession = (props) => {
 	let creds = props.state.cognito.credentials;
@@ -18,7 +17,7 @@ export const userHasValidIdentitySession = (props) => {
 			props.history.push(props.path);
 
 		}, err => {
-			console.log('err', err);
+			props.dispatch(logout(props.state.cognito.user));
 			props.history.push('/signin');
 		});
 	} else {
@@ -26,19 +25,8 @@ export const userHasValidIdentitySession = (props) => {
 			IdentityPoolId: appConfig.IdentityPoolId,
 			Logins: getLoginsFromLocallyStoredAccessTokens(props.state, appConfig)
 		});
-		creds.getPromise().then(() => {
 
-			// Save credentials in the store
-			props.dispatch(updateCredentials(creds));
-
-			props.history.push(props.path);
-
-
-		}, err => {
-			console.log('err', err);
-			props.history.push('/signin');
-		});
-
+		props.dispatch(getCredentials(creds, props));
 	}
 };
 
@@ -60,7 +48,7 @@ export const signOut = (props) => {
 };
 
 
-export const getCredentials = (state, appConfig) => {
+export const getCredentialsFromLocalStorage = (state, appConfig) => {
 	return new AWS.CognitoIdentityCredentials({
 		IdentityPoolId: appConfig.IdentityPoolId,
 		Logins: getLoginsFromLocallyStoredAccessTokens(state, appConfig)
