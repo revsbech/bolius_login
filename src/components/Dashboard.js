@@ -52,27 +52,45 @@ class Dashboard extends React.Component {
 
 	render() {
 		return (
-			<div className="wrapper">
-				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
-					<h2 className="form-signin-heading">Hep {this.state.userDetails.name}, you are perfectly signed in
-						:)</h2>
-					<p><a target="blank"
-						  href={'http://localhost/index.php?id=37&logintype=login&cognito_id_token=' + this.state.openIdToken}>Login
-						to bolius (Test-link)</a></p>
-					<Link to="/delete-user">Delete user?</Link>
-					<p><a href="#" onClick={this.handleCreateIdentity.bind(this)}>Fetch OpenID Token for further
-						validation</a></p>
-					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Sign out"/>
-					<hr />
-					<FacebookLogin
-						appId="294138207713667"
-						autoLoad={false}
-						fields="name,email,picture"
-						callback={this.responseFacebook.bind(this)}
-						textButton="Tilknyt facebook"
-					/>
-					<TokenViewer token={this.state.openIdToken}/>
-				</form>
+			<div className="vertical-center">
+				<div className="container">
+					<div className="row">
+						<div className="col-xs-4 offset-xs-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-12">
+							<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
+								<h2 className="form-signin-heading">Bolius login - Logget ind</h2>
+								<p>Du er logget ind i bolius universet med brugernavn <strong>@todo</strong>. Vælg om du vil videre til</p>
+
+			<ul>
+			  <li>Mit bolius (bolius.dk)</li>
+			  <li>Husets kalender</li>
+			</ul>
+
+
+								<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Log ud"/>
+								<hr />
+								<h5>Andre loginmuligheder</h5>
+								<p>Hvis du heller vil kunne logge ind med facebook, Google+ eller andet, så tilknyt dit loginer her.</p>
+								<div className="social-login">
+									<FacebookLogin
+										appId="294138207713667"
+										cssClass="facebook"
+										autoLoad={false}
+										fields="name,email,picture"
+										callback={this.responseFacebook.bind(this)}
+										textButton=""
+										tag="a"
+									/>
+								</div>
+											<hr />
+								<h5>Debug</h5>
+								<p>
+									<a href="#" onClick={this.handleCreateIdentity.bind(this)}>Fetch OpenID Token for further validation</a>
+								</p>
+								<TokenViewer token={this.state.openIdToken}/>
+							</form>
+						</div>
+			 	  </div>
+			  </div>
 			</div>
 		);
 	}

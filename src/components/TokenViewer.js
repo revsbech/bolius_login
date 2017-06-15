@@ -4,7 +4,7 @@ class TokenViewer extends React.Component {
 
   render() {
     return (
-      <div>Token viewer: <pre>{this.props.token}</pre></div>
+      <div>Token viewer: <textarea className="token-selector" value={this.props.token}/></div>
     );
   }
 }

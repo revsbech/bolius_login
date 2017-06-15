@@ -13,7 +13,6 @@ html, body {
 .vertical-center {
   min-height: 100%;
   min-height: 100vh;
-
   display: flex;
   align-items: center;
 }
@@ -149,6 +148,15 @@ form {
       color: #eee;
     }
   }
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  border: 0px;
+  height: 120px;
+  font-family: Tahoma, sans-serif;
+  font-size: 10px;
 }
 
 /*
