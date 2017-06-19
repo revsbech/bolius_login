@@ -3,6 +3,7 @@ import {
 	CognitoUserAttribute,
 	CognitoUser,
 } from "amazon-cognito-identity-js";
+import swal from "sweetalert2";
 
 export const signIn = (email, password, props) => {
 	let authenticationData = {
@@ -110,4 +111,32 @@ export const deleteUser = (props) => {
 	} else {
 		throw new Error('No instance of cognitoUser to delete!');
 	}
+};
+
+export const forgotPassword = (email, props) => {
+  return new CognitoUser({
+    Username: email,
+    Pool: props.state.cognito.userPool
+  }).forgotPassword({
+    onSuccess: props.history.push('/forgot-password-verification'),
+    onFailure: err => swal({
+      type: 'error',
+      title: 'Err!',
+      text: err
+    })
+  })
+};
+
+export const forgotPasswordVerification = (verificationCode, email, password, props) => {
+  return new CognitoUser({
+    Username: email,
+    Pool: props.state.cognito.userPool
+  }).confirmPassword(verificationCode, password, {
+    onSuccess: signIn(email, password, props),
+    onFailure: err => swal({
+      type: 'error',
+      title: 'Fejl',
+      text: err
+    })
+  });
 };

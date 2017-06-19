@@ -7,6 +7,8 @@ import ConfirmEmailForm from './components/ConfirmEmailForm';
 import Dashboard from './components/Dashboard';
 import Frontpage from './components/Frontpage';
 import DeleteUser from './components/DeleteUser';
+import ForgotPassword from './components/ForgotPassword';
+import ForgotPasswordVerification from './components/ForgotPasswordVerification';
 import {connect} from 'react-redux';
 
 
@@ -17,6 +19,8 @@ const AppRouter = () => (
 			<Route path="/signin" component={SignInForm} ></Route>
 			<Route path="/signup" component={SignUpForm} ></Route>
 			<Route path="/confirm-email" component={ConfirmEmailForm} ></Route>
+			<Route path="/forgot-password" component={ForgotPassword}/>
+			<Route path="/forgot-password-verification" component={ForgotPasswordVerification}/>
 			<AuthRoute path="/dashboard" component={Dashboard}/>
 			<AuthRoute path="/delete-user" component={DeleteUser}/>
 		</div>
