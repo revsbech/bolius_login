@@ -114,41 +114,29 @@ export const deleteUser = (props) => {
 };
 
 export const forgotPassword = (email, props) => {
-  let userPool = props.state.cognito.userPool;
-
-	let cognitoUser = new CognitoUser({
+	return new CognitoUser({
     Username: email,
-    Pool: userPool
-	});
-
-	cognitoUser.forgotPassword({
+    Pool: props.state.cognito.userPool
+	}).forgotPassword({
 		onSuccess: props.history.push('/forgot-password-verification'),
-		onFailure: err => {
-			swal({
-				type: 'error',
-				title: 'Err!',
-				text: err,
-			});
-		}
+		onFailure: err => swal({
+      type: 'error',
+      title: 'Err!',
+      text: err
+    })
 	})
 };
 
 export const forgotPasswordVerification = (verificationCode, email, password, props) => {
-  let userPool = props.state.cognito.userPool;
-
-  let cognitoUser = new CognitoUser({
+  return new CognitoUser({
     Username: email,
-    Pool: userPool
-  });
-
-  cognitoUser.confirmPassword(verificationCode, password, {
+    Pool: props.state.cognito.userPool
+  }).confirmPassword(verificationCode, password, {
     onSuccess: signIn(email, password, props),
-    onFailure: err => {
-    	swal({
-    		type: 'error',
-				title: 'Fejl',
-				text: err
-			})
-		}
+    onFailure: err => swal({
+      type: 'error',
+      title: 'Fejl',
+      text: err
+    })
 	});
 };
