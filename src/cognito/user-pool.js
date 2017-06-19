@@ -114,17 +114,17 @@ export const deleteUser = (props) => {
 };
 
 export const forgotPassword = (email, props) => {
-	return new CognitoUser({
+  return new CognitoUser({
     Username: email,
     Pool: props.state.cognito.userPool
-	}).forgotPassword({
-		onSuccess: props.history.push('/forgot-password-verification'),
-		onFailure: err => swal({
+  }).forgotPassword({
+    onSuccess: props.history.push('/forgot-password-verification'),
+    onFailure: err => swal({
       type: 'error',
       title: 'Err!',
       text: err
     })
-	})
+  })
 };
 
 export const forgotPasswordVerification = (verificationCode, email, password, props) => {
@@ -138,5 +138,5 @@ export const forgotPasswordVerification = (verificationCode, email, password, pr
       title: 'Fejl',
       text: err
     })
-	});
+  });
 };
