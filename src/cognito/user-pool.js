@@ -132,7 +132,7 @@ export const forgotPassword = (email, props) => {
     Username: email,
     Pool: props.state.cognito.userPool
   }).forgotPassword({
-    onSuccess: props.history.push('/forgot-password-verification'),
+    onSuccess: () => { props.history.push('/forgot-password-verification') },
     onFailure: err => swal({
       type: 'error',
       title: 'Fejl',
@@ -146,7 +146,7 @@ export const forgotPasswordVerification = (verificationCode, email, password, pr
     Username: email,
     Pool: props.state.cognito.userPool
   }).confirmPassword(verificationCode, password, {
-    onSuccess: signIn(email, password, props),
+    onSuccess: () => { signIn(email, password, props) },
     onFailure: err => swal({
       type: 'error',
       title: 'Fejl',
