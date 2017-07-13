@@ -8,10 +8,13 @@ const AuthRoute = ({ component: Component, ...rest }) => (
 		userHasValidIdentitySession({props, ...rest}) ? (
 			<Component {...props}/>
 		) : (
-			<Redirect to={{
-				pathname: '/signin',
-				state: { from: props.location }
-			}}/>
+			<div className="vertical-center">
+				<div className="container">
+					<div className="text-center">
+						<i className="fa fa-spinner fa-pulse fa-3x fa-fw text-white"></i>
+					</div>
+				</div>
+			</div>
 		)
 	)}/>
 );

@@ -34,7 +34,7 @@ export const signIn = (email, password, props) => {
         swal({
           type: 'error',
           title:' Fejl',
-          text: err
+          text: err.message
         });
       }
     },
@@ -56,7 +56,7 @@ export const signUp = (email, password, props) => {
       swal({
         type: 'error',
         title:' Fejl',
-        text: err
+        text: err.message
       });
       return;
     }
@@ -93,7 +93,7 @@ export const confirmEmail = (email, confirmationCode, props) => {
         swal({
           type: 'error',
           title:' Fejl',
-          text: err
+          text: err.message
         });
         return;
       }
@@ -114,7 +114,7 @@ export const deleteUser = props => {
         swal({
           type: 'error',
           title:' Fejl',
-          text: err
+          text: err.message
         });
         return;
       }
@@ -136,7 +136,7 @@ export const forgotPassword = (email, props) => {
     onFailure: err => swal({
       type: 'error',
       title: 'Fejl',
-      text: err
+      text: err.message
     })
   })
 };
@@ -147,10 +147,12 @@ export const forgotPasswordVerification = (verificationCode, email, password, pr
     Pool: props.state.cognito.userPool
   }).confirmPassword(verificationCode, password, {
     onSuccess: () => { signIn(email, password, props) },
-    onFailure: err => swal({
+    onFailure: err => {
+      swal({
       type: 'error',
       title: 'Fejl',
-      text: err
+      text: err.message
     })
+    }
   });
 };
