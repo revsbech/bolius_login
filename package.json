@@ -12,6 +12,8 @@
     "react-dom": "^15.5.4",
     "react-facebook-login": "^3.6.1",
     "react-fontawesome": "^1.6.1",
+    "react-google-login": "^2.9.2",
+    "react-linkedin-login": "^1.0.3",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",

@@ -88,7 +88,8 @@ form {
     text-align: center;
 
     a,
-    span > a {
+    span > a,
+    button {
       display: inline-block;
       width: 40px;
       height: 40px;
@@ -96,6 +97,8 @@ form {
       margin: 0 10px;
       -webkit-appearance: inherit;
       cursor: pointer;
+      border: 0;
+      padding: 0;
 
       &:before {
         @extend .fa;
