@@ -4,6 +4,7 @@ import {
   CognitoUser,
 } from "amazon-cognito-identity-js";
 import swal from "sweetalert2";
+import { i18n } from "../i18n";
 
 export const signIn = (email, password, props) => {
   let authenticationData = {
@@ -34,7 +35,7 @@ export const signIn = (email, password, props) => {
         swal({
           type: 'error',
           title:' Fejl',
-          text: err.message
+          text: i18n(err.code)
         });
       }
     },
@@ -56,7 +57,7 @@ export const signUp = (email, password, props) => {
       swal({
         type: 'error',
         title:' Fejl',
-        text: err.message
+        text: i18n(err.code)
       });
       return;
     }
@@ -93,7 +94,7 @@ export const confirmEmail = (email, confirmationCode, props) => {
         swal({
           type: 'error',
           title:' Fejl',
-          text: err.message
+          text: i18n(err.code)
         });
         return;
       }
@@ -114,7 +115,7 @@ export const deleteUser = props => {
         swal({
           type: 'error',
           title:' Fejl',
-          text: err.message
+          text: i18n(err.code)
         });
         return;
       }
@@ -136,7 +137,7 @@ export const forgotPassword = (email, props) => {
     onFailure: err => swal({
       type: 'error',
       title: 'Fejl',
-      text: err.message
+      text: i18n(err.code)
     })
   })
 };
@@ -149,10 +150,10 @@ export const forgotPasswordVerification = (verificationCode, email, password, pr
     onSuccess: () => { signIn(email, password, props) },
     onFailure: err => {
       swal({
-      type: 'error',
-      title: 'Fejl',
-      text: err.message
-    })
+        type: 'error',
+        title: 'Fejl',
+        text: i18n(err.code)
+      });
     }
   });
 };
