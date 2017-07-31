@@ -12,10 +12,15 @@ html, body {
 }
 
 .vertical-center {
-  min-height: 100%;
-  min-height: 100vh;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
   align-items: center;
+  justify-content: center;
+  -ms-flex-pack: center;
+  min-height: 100%;
+  min-height: 100vh;
+  height: 100px;
 }
 
 .back > a{
@@ -88,7 +93,8 @@ form {
     text-align: center;
 
     a,
-    span > a {
+    span > a,
+    button {
       display: inline-block;
       width: 40px;
       height: 40px;
@@ -96,6 +102,8 @@ form {
       margin: 0 10px;
       -webkit-appearance: inherit;
       cursor: pointer;
+      border: 0;
+      padding: 0;
 
       &:before {
         @extend .fa;

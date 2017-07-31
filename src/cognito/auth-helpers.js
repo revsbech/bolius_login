@@ -26,6 +26,7 @@ export const userHasValidIdentitySession = (props) => {
 			IdentityPoolId: appConfig.IdentityPoolId,
 			Logins: getLoginsFromLocallyStoredAccessTokens(props.state, appConfig)
 		});
+
 		creds.getPromise().then(() => {
 
 			// Save credentials in the store
@@ -45,6 +46,9 @@ export const userHasValidIdentitySession = (props) => {
 export const signOut = (props) => {
 	// Remove the facebook access token stored locally
 	localStorage.removeItem('facebookAccessToken');
+	localStorage.removeItem('twitterAccessToken');
+	localStorage.removeItem('googleAccessToken');
+	localStorage.removeItem('linkedinAccessToken');
 
 	// If signed in with username/password, log out of cognito UserPool
 	let cognitoUser = props.state.cognito.user;
