@@ -30,7 +30,7 @@ class ConfirmEmailForm extends React.Component {
 	render() {
 		return (
 			<div className="wrapper">
-				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
+				<form onSubmit={this.handleSubmit.bind(this)}>
 					<h2 className="form-signin-heading">Confirm email</h2>
 					<p>Before you can sign in you need to confirm your email address. <br/> Please check you email for a confirmation code and type both the email and the code below.</p>
 					<input type="text"

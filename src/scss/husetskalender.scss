@@ -1,0 +1,72 @@
+.husetskalender {
+
+  background: #f5f5f5;
+
+  .form-signin {
+    background-color: #dedede;
+
+    a {
+      color: #ffa700;
+
+      &:hover, &:focus {
+        color: #ffc600;
+      }
+    }
+
+    .btn-primary {
+      background: #ffa700;
+      border-color: #ffa700;
+
+      &:hover, &:focus {
+        background: #ffc600;
+        border-color: #ffc600;
+      }
+    }
+
+    .form-control:focus {
+      border-color: #ffa700;
+    }
+
+    .logo {
+      background-image: none;
+      text-align: center;
+      display: block;
+      min-height: 60px;
+      height: auto;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgb(136, 136, 136);
+
+      &:before {
+        content: '';
+        background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMyIgZGF0YS1uYW1lPSJMYXllciAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgNzQzNy4yNCA3MzQ1LjU4Ij48ZGVmcz48c3R5bGU+LmNscy0xLC5jbHMtMntmaWxsOm5vbmU7fS5jbHMtMntzdHJva2U6I2NkY2RjZDtzdHJva2UtbWl0ZXJsaW1pdDoxMDtzdHJva2Utd2lkdGg6MTI2cHg7fS5jbHMtM3tmaWxsOiNmZmY7fS5jbHMtNHtmaWxsOiNjZGNkY2Q7fS5jbHMtNXtmaWxsOiNmMmYyZjI7fS5jbHMtNntmaWxsOiM5OTk7fS5jbHMtN3tmaWxsOiNlZTVjNDc7fS5jbHMtOHtjbGlwLXBhdGg6dXJsKCNjbGlwLXBhdGgpO30uY2xzLTl7ZmlsbDojYjc0NjM0O308L3N0eWxlPjxjbGlwUGF0aCBpZD0iY2xpcC1wYXRoIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjUyLjE3IC0yMjQuNzkpIj48cGF0aCBpZD0iSFVTIiBjbGFzcz0iY2xzLTEiIGQ9Ik0zOTc5Ljg2LDIxODAuMzZMMjA4NC40MSwzNjM5LjU3aC0ybC00LjA2LDI4MTcuMjUsMzc3Ni4xNy0yLjQ4LTAuMzgtMjgwNS43NlptMTExMSwzNjA5LjQ4TDI4NDIsNTc5Mi4zMmwwLjg4LTE3NzguMTUsMTEzNy42NC04OTFMNTA5NSw0MDIyLjg0WiIvPjwvY2xpcFBhdGg+PC9kZWZzPjx0aXRsZT5IdXNldHNLYWxlbmRlcl9pY29uPC90aXRsZT48ZWxsaXBzZSBpZD0iX1BhdGhfIiBkYXRhLW5hbWU9IiZsdDtQYXRoJmd0OyIgY2xhc3M9ImNscy0yIiBjeD0iNTYxOS43MyIgY3k9Ijc2Ny44MSIgcng9IjMyNS41NCIgcnk9IjMyNi45NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDU3Ni4yMSA2MTU5LjQ4KSByb3RhdGUoLTg5Ljc2KSIvPjxlbGxpcHNlIGlkPSJfUGF0aF8yIiBkYXRhLW5hbWU9IiZsdDtQYXRoJmd0OyIgY2xhc3M9ImNscy0yIiBjeD0iMjM5NyIgY3k9Ijc1NC41NiIgcng9IjMyNS41NCIgcnk9IjMyNi45NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTM4MC4yNCAyOTIzLjYpIHJvdGF0ZSgtODkuNzYpIi8+PHBhdGggaWQ9Il9Db21wb3VuZF9QYXRoXyIgZGF0YS1uYW1lPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJjbHMtMyIgZD0iTTcwMzIsMjI5LjE4Yy01ODc0LjYtMy4yMS01ODc0LjYtMy40NC02MTAxLjQzLTQuMzktMjg5LjY2LTEuMjEtMzY2LjkxLDIxOC44NC0zNjcuNjMsMzU3LjctMSwyMDMuNTMsOS42OCwzODIxLjM2LDkuNjgsMzgyMS4zNmw2Nzk2LjQsMHM1LjkzLTM2NTIuNzgsNi4zNC0zNzc2Ljc2QzczNzYuNDYsMjgzLjIxLDcxMjEuODksMjMxLDcwMzIsMjI5LjE4Wm0tNDY3My4zMiw3NzljLTE2MC0uNjctMjg5LjExLTEzMC45LTI4OC40NC0yOTAuODdzMTMwLjktMjg5LjExLDI5MC44Ny0yODguNDQsMjg5LjExLDEzMC45LDI4OC40NCwyOTAuODdTMjUxOC42MiwxMDA4Ljg2LDIzNTguNjUsMTAwOC4xOVptMzIyMi43MywxMy4yNGMtMTYwLS42Ny0yODkuMTEtMTMwLjktMjg4LjQ0LTI5MC44N3MxMzAuOS0yODkuMTEsMjkwLjg3LTI4OC40NFM1ODcyLjkyLDU3Myw1ODcyLjI1LDczMyw1NzQxLjM1LDEwMjIuMSw1NTgxLjM4LDEwMjEuNDNaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjUyLjE3IC0yMjQuNzkpIi8+PHBhdGggY2xhc3M9ImNscy00IiBkPSJNNTcyLjU5LDQ0MDMuODVMMjUyLjE3LDE2MjguNDljMC0yMTUuMTIsMTkyLjU4LTM5MS4xMiw0MjgtMzkxLjEySDcyMzkuNzdjMjM1LjM3LDAsNDI4LDE3Niw0MjgsMzkxLjEyTDczNjksNDQwMy44OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yNTIuMTcgLTIyNC43OSkiLz48cGF0aCBjbGFzcz0iY2xzLTUiIGQ9Ik03MzY5LDQ0MDMuODlsMzIwLjQyLDI3NzUuMzZjMCwyMTUuMTItMTkyLjU4LDM5MS4xMi00MjgsMzkxLjEySDcwMS44MWMtMjM1LjM3LDAtNDI4LTE3Ni00MjgtMzkxLjEybDI5OC43My0yNzc1LjRaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjUyLjE3IC0yMjQuNzkpIi8+PHJlY3QgaWQ9Il9SZWN0YW5nbGVfIiBkYXRhLW5hbWU9IiZsdDtSZWN0YW5nbGUmZ3Q7IiBjbGFzcz0iY2xzLTYiIHg9IjExMzUuNDgiIHk9IjM5MzAuNTIiIHdpZHRoPSIzNzkuOTciIGhlaWdodD0iOTExLjgyIiByeD0iMTE1IiByeT0iMTE1IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjMzLjc3IC0yMzAuMykgcm90YXRlKDAuMjQpIi8+PHJlY3QgaWQ9Il9SZWN0YW5nbGVfMiIgZGF0YS1uYW1lPSImbHQ7UmVjdGFuZ2xlJmd0OyIgY2xhc3M9ImNscy02IiB4PSI2NDA1Ljc3IiB5PSIzOTU0LjM1IiB3aWR0aD0iMzc5Ljk3IiBoZWlnaHQ9IjkxMS44MiIgcng9IjEyMC45NSIgcnk9IjEyMC45NSIgdHJhbnNmb3JtPSJtYXRyaXgoMSwgMCwgMCwgMSwgLTIzMy42MiwgLTI1Mi4zOSkiLz48cGF0aCBpZD0iSFVTLTIiIGRhdGEtbmFtZT0iSFVTIiBjbGFzcz0iY2xzLTciIGQ9Ik0zOTc5Ljg2LDIxODAuMzZMMjA4NC40MSwzNjM5LjU3aC0ybC00LjA2LDI4MTcuMjUsMzc3Ni4xNy0yLjQ4LTAuMzgtMjgwNS43NlptMTExMSwzNjA5LjQ4TDI4NDIsNTc5Mi4zMmwwLjg4LTE3NzguMTUsMTEzNy42NC04OTFMNTA5NSw0MDIyLjg0WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI1Mi4xNyAtMjI0Ljc5KSIvPjxnIGNsYXNzPSJjbHMtOCI+PHJlY3QgY2xhc3M9ImNscy05IiB4PSIxMTg1Ljg4IiB5PSIxNzk5LjQ1IiB3aWR0aD0iNTE1Ny43MSIgaGVpZ2h0PSIyMzg2LjAyIi8+PC9nPjwvc3ZnPg==);
+        background-repeat: no-repeat;
+        width: 64px;
+        height: 60px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &:after {
+        content: 'Husets kalender';
+        font-size: 24px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 12px;
+      }
+    }
+  }
+
+  .back > a {
+    color: #2d2e33;
+    &:after {
+      content: ' Husets kalender';
+    }
+  }
+
+  hr {
+    border-color: rgb(136, 136, 136);
+  }
+
+
+}

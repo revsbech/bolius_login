@@ -3,7 +3,8 @@ $fa-font-path: '../node_modules/font-awesome/fonts';
 @import '../node_modules/font-awesome/scss/font-awesome.scss';
 @import '../node_modules/sweetalert2/src/sweetalert2.scss';
 
-@import './shared.scss';
+@import './scss/shared.scss';
+@import './scss/husetskalender.scss';
 
 html, body {
   background: $bg-secondary;
@@ -24,6 +25,7 @@ html, body {
 }
 
 .back > a{
+  display: none !important;
   color: #fff;
   font-size: 0.85em;
   position: absolute;
@@ -36,9 +38,13 @@ html, body {
     content: $fa-var-angle-left;
     margin-right: 10px;
   }
+
+  &:after {
+    content: ' Bolius';
+  }
 }
 
-form {
+.form-signin {
   background: $bg-primary;
   padding: 20px 30px;
 

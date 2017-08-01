@@ -13,7 +13,7 @@ class DeleteUser extends React.Component {
 	render() {
 		return (
 			<div className="wrapper">
-				<form onSubmit={this.handleSubmit.bind(this)} className="form-signin">
+				<form onSubmit={this.handleSubmit.bind(this)}>
 					<h2 className="form-signin-heading">Delete user</h2>
 					<p>Are you sure you want to delete your user?</p>
 					<input type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn" value="Yes, delete"/>
