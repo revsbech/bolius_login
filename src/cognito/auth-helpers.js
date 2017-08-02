@@ -2,6 +2,7 @@ import appConfig from '../config';
 import AWS  from "aws-sdk";
 import { getLoginsFromLocallyStoredAccessTokens } from './utils';
 import { updateCredentials } from '../Redux/actions';
+import {resetRedirectUrls} from "./url-helpers";
 
 
 export const userHasValidIdentitySession = (props) => {
@@ -49,6 +50,7 @@ export const signOut = (props) => {
 	localStorage.removeItem('twitterAccessToken');
 	localStorage.removeItem('googleAccessToken');
 	localStorage.removeItem('linkedinAccessToken');
+	resetRedirectUrls();
 
 	// If signed in with username/password, log out of cognito UserPool
 	let cognitoUser = props.state.cognito.user;
@@ -60,7 +62,7 @@ export const signOut = (props) => {
 	props.logout();
 
 	// Redirect to signin
-	props.history.push('/signin');
+	props.history.push('/');
 };
 
 

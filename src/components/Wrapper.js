@@ -8,6 +8,8 @@ import Dashboard from './Dashboard';
 import DeleteUser from './DeleteUser';
 import ForgotPassword from './ForgotPassword';
 import ForgotPasswordVerification from './ForgotPasswordVerification';
+import {getFailureRedirectUrl, getSuccessRedirectUrl, isHusetskalender} from "../cognito/url-helpers";
+
 class Wrapper extends React.Component {
 
   constructor(props) {
@@ -15,9 +17,14 @@ class Wrapper extends React.Component {
 
     let state = { bodyClass: 'bolius' };
 
-    if (window.location.search.indexOf('ref=husetskalender') > -1) {
+    if (isHusetskalender()) {
       state = { bodyClass: 'husetskalender' };
     }
+
+    const successUrl = getSuccessRedirectUrl();
+    const failureUrl = getFailureRedirectUrl();
+
+
 
     this.state = state;
   }
