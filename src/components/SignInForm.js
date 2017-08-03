@@ -125,7 +125,7 @@ class SignInForm extends React.Component {
 
           <a href="" className="twitter"></a>
           <GoogleLogin
-            clientId="xxx"
+            clientId="179973339189-do9jmf5ccie25gislikdrjmvhm8jnqna.apps.googleusercontent.com"
             onSuccess={this.handleGoogleLogin.bind(this)}
             onFailure={this.handleGoogleLogin.bind(this)}
             buttonText=""
