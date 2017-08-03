@@ -62,13 +62,13 @@ export const getLoginsFromLocallyStoredAccessTokens = (state, appConfig) => {
   // Twitter login
   let twitterAccessToken = localStorage.getItem('twitterAccessToken');
   if (twitterAccessToken && twitterAccessToken !== "null") {
-    logins['twitter.com'] = twitterAccessToken;
+    logins['api.twitter.com'] = twitterAccessToken;
   }
 
   // Google login
   let googleAccessToken = localStorage.getItem('googleAccessToken');
   if (googleAccessToken && googleAccessToken !== "null") {
-    logins['google.com'] = googleAccessToken;
+    logins['accounts.google.com'] = googleAccessToken;
   }
 
   // Linkedin login
