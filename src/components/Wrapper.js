@@ -8,7 +8,9 @@ import Dashboard from './Dashboard';
 import DeleteUser from './DeleteUser';
 import ForgotPassword from './ForgotPassword';
 import ForgotPasswordVerification from './ForgotPasswordVerification';
-import {getFailureRedirectUrl, getSuccessRedirectUrl, isHusetskalender} from "../cognito/url-helpers";
+import {
+  getFailureRedirectUrl, getSuccessRedirectUrl, isHusetskalender
+} from "../cognito/url-helpers";
 
 class Wrapper extends React.Component {
 
@@ -23,8 +25,6 @@ class Wrapper extends React.Component {
 
     const successUrl = getSuccessRedirectUrl();
     const failureUrl = getFailureRedirectUrl();
-
-
 
     this.state = state;
   }

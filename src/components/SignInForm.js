@@ -17,6 +17,7 @@ import {
   signInGoogle,
   signInLinkedin
 } from '../cognito';
+import {getTwitterOauthToken} from "../cognito/url-helpers";
 
 
 class SignInForm extends React.Component {
@@ -26,6 +27,10 @@ class SignInForm extends React.Component {
       email: localStorage.getItem('cognitoUserEmail') || '',
       password: ''
     };
+
+    if (getTwitterOauthToken()) {
+      signInTwitter(getTwitterOauthToken(), null, this.props.history, this.props);
+    }
   }
 
   handleEmailChange(e) {
@@ -55,10 +60,23 @@ class SignInForm extends React.Component {
     }, this.props.history, this.props);
   }
 
-  handleTwitterLogin() {
-    signInTwitter(() => {
-      this.props.history.push('/dashboard');
-    }, this.props.history, this.props);
+  handleTwitterLogin(response) {
+
+    var callbackUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/oauth/callback.php';
+
+    var data = new FormData();
+    data.append('callback', callbackUrl);
+
+    fetch('/oauth/twitter.php', {
+      method: 'POST',
+      body: data,
+      credentials: 'include'
+    }).then(response => {
+      return response.json();
+    }).then(body => {
+      window.location = body.url;
+    });
+
   }
 
   handleGoogleLogin(response) {
@@ -107,6 +125,7 @@ class SignInForm extends React.Component {
           </div>
           <div className="col-6">
             <button type="submit" className="btn btn-lg btn-primary btn-block sign-in-btn text-uppercase">Log ind</button>
+
           </div>
         </div>
 
@@ -123,7 +142,8 @@ class SignInForm extends React.Component {
             tag="a"
           />
 
-          <a href="" className="twitter"></a>
+          <a href="#" onClick={this.handleTwitterLogin} className="twitter"></a>
+
           <GoogleLogin
             clientId="179973339189-do9jmf5ccie25gislikdrjmvhm8jnqna.apps.googleusercontent.com"
             onSuccess={this.handleGoogleLogin.bind(this)}

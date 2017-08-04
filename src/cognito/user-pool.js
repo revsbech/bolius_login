@@ -99,10 +99,10 @@ export const confirmEmail = (email, confirmationCode, props) => {
         return;
       }
 
-      props.history.push('/signin');
+      props.history.push('/');
     });
   } else {
-    props.history.push('/signin');
+    props.history.push('/');
   }
 };
 
@@ -120,7 +120,7 @@ export const deleteUser = props => {
         return;
       }
 
-      props.history.push('/signin');
+      props.history.push('/');
     });
 
   } else {

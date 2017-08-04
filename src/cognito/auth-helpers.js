@@ -20,7 +20,7 @@ export const userHasValidIdentitySession = (props) => {
 
 		}, err => {
 			console.log('err', err);
-			props.history.push('/signin');
+			props.history.push('/');
 		});
 	} else {
 		let creds = new AWS.CognitoIdentityCredentials({
@@ -38,7 +38,7 @@ export const userHasValidIdentitySession = (props) => {
 
 		}, err => {
 			console.log('err', err);
-			props.history.push('/signin');
+			props.history.push('/');
 		});
 
 	}

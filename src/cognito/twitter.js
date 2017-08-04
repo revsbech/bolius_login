@@ -1,6 +1,5 @@
-export const signInTwitter = (response, cb, history, props) => {
-  let accessToken = response.accessToken;
+export const signInTwitter = (token, cb, history, props) => {
 
-  localStorage.setItem('twitterccessToken', accessToken);
+  localStorage.setItem('twitterAccessToken', token);
   history.push('/dashboard')
 };

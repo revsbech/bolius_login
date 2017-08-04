@@ -33,6 +33,8 @@ export const resetRedirectUrls = () => {
   localStorage.removeItem('ref');
 };
 
+export const getTwitterOauthToken = () => getQueryVariable('token');
+
 function getQueryVariable(variable) {
   var query = window.location.search.substring(1);
   var vars = query.split('&');
@@ -42,5 +44,4 @@ function getQueryVariable(variable) {
       return decodeURIComponent(pair[1]);
     }
   }
-  console.log('Query variable %s not found', variable);
 }
