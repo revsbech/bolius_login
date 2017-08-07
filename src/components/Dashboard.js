@@ -1,6 +1,6 @@
 import React from "react";
 import TokenViewer from './TokenViewer';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import appConfig from '../config';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
@@ -8,7 +8,8 @@ import { bindActionCreators } from 'redux';
 import { logout, updateCredentials } from '../Redux/actions';
 import { signOut, getCredentials } from '../cognito/auth-helpers';
 import { getOpenIdTokenForCurrentUser,  } from '../cognito/utils';
-
+import BoliusApi from '../boliusapi';
+import swal from "sweetalert2";
 class Dashboard extends React.Component {
 
 	constructor() {
@@ -24,15 +25,24 @@ class Dashboard extends React.Component {
 		signOut(this.props);
 	}
 
-	handleCreateIdentity(e) {
-		e.preventDefault();
-		console.log("Fetching id");
+	componentDidMount() {
+		this.fetchCurrentUserAndToken();
+  }
+  fetchCurrentUserAndToken() {
 		getOpenIdTokenForCurrentUser(this.props).then((token) => {
-			console.log(token);
 			this.setState({openIdToken: token});
+			BoliusApi.getUser(token).then((userData) => {
+				this.setState({userDetails: userData.data.attributes});
+			}).catch(err => {
+				swal({
+					type: 'error',
+					title: ' Fejl',
+					text: "Der opstod en fejl i kommunikationen med api.bolius.dk"
+				});
+			});
 		});
-	}
 
+	}
 	responseFacebook(response) {
 		//Make sure the access token is set, since we use that when determine which logins to use when calling AWS
 		localStorage.setItem('facebookAccessToken', response.accessToken);
@@ -43,7 +53,6 @@ class Dashboard extends React.Component {
 
 			// Update credentials in the store
 			this.props.updateCredentials(creds);
-
 			alert('Connected!');
 		}, err => {
 			console.log('err', err);
@@ -54,7 +63,7 @@ class Dashboard extends React.Component {
 		return (
 			<form onSubmit={this.handleSubmit.bind(this)}>
 				<h2 className="form-signin-heading">Bolius login - Logget ind</h2>
-				<p>Du er logget ind i bolius universet med brugernavn <strong>@todo</strong>. Vælg om du vil videre til</p>
+				<p>Du er logget ind i bolius universet med brugernavn <strong>{this.state.userDetails.name}</strong>. Vælg om du vil videre til</p>
 
 				<ul>
 					<li>Mit bolius (bolius.dk)</li>
@@ -79,9 +88,6 @@ class Dashboard extends React.Component {
 				</div>
 							<hr />
 				<h5>Debug</h5>
-				<p>
-					<a href="#" onClick={this.handleCreateIdentity.bind(this)}>Fetch OpenID Token for further validation</a>
-				</p>
 				<TokenViewer token={this.state.openIdToken}/>
 			</form>
 		);
