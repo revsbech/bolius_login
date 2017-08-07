@@ -9,7 +9,7 @@ import DeleteUser from './DeleteUser';
 import ForgotPassword from './ForgotPassword';
 import ForgotPasswordVerification from './ForgotPasswordVerification';
 import {
-  getFailureRedirectUrl, getSuccessRedirectUrl, isHusetskalender
+  isHusetskalender
 } from "../cognito/url-helpers";
 
 class Wrapper extends React.Component {
@@ -23,8 +23,6 @@ class Wrapper extends React.Component {
       state = { bodyClass: 'husetskalender' };
     }
 
-    const successUrl = getSuccessRedirectUrl();
-    const failureUrl = getFailureRedirectUrl();
 
     this.state = state;
   }
