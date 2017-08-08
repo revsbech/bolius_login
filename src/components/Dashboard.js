@@ -8,14 +8,17 @@ import { bindActionCreators } from 'redux';
 import { logout, updateCredentials } from '../Redux/actions';
 import { signOut, getCredentials } from '../cognito/auth-helpers';
 import { getOpenIdTokenForCurrentUser,  } from '../cognito/utils';
-import BoliusApi from '../boliusapi';
+import {BoliusApi} from '../boliusapi';
 import swal from "sweetalert2";
+
 class Dashboard extends React.Component {
 
 	constructor() {
 		super();
 		this.state = {
-			userDetails: {},
+			userDetails: {
+				fistName: "ukendt"
+			},
 			openIdToken: ""
 		};
 	}
@@ -48,11 +51,39 @@ class Dashboard extends React.Component {
 			BoliusApi.getUser(token).then((userData) => {
 				this.setState({userDetails: userData.data.attributes});
 			}).catch(err => {
-				swal({
-					type: 'error',
-					title: ' Fejl',
-					text: err.message
-				});
+
+				if (err.type === 404) {
+					//Create user in API
+					console.log("Create user in API");
+					const userData = {
+						"firstName": "Test",
+						"lastName":  "Tester",
+						"email": "email@example.com"
+					};
+					BoliusApi.createUser(token, userData).then(() => {
+						swal({
+							type: 'info',
+							title: ' Bruger oprettet',
+							text: "Der er oprettet en bruger til dig."
+						});
+						//Call again to make sure it loads correctly
+						BoliusApi.getUser(token).then((userData) => {
+										this.setState({userDetails: userData.data.attributes});
+						});
+          }).catch(err => {
+						swal({
+							type: 'error',
+							title: ' Fejl : ' + err.id,
+							text: err.message
+						});
+					});
+        } else {
+          swal({
+            type: 'error',
+            title: ' Fejl : ' + err.id,
+            text: err.message
+          });
+        }
 			});
 		});
 
@@ -64,12 +95,15 @@ class Dashboard extends React.Component {
 		let creds = getCredentials(this.props.state, appConfig);
 
 		creds.getPromise().then(() => {
-
 			// Update credentials in the store
 			this.props.updateCredentials(creds);
-			alert('Connected!');
 		}, err => {
-			console.log('err', err);
+			swal({
+				type: 'error',
+				title: ' Fejl',
+				text: err
+			});
+
 		});
 	}
 
@@ -77,7 +111,7 @@ class Dashboard extends React.Component {
 		return (
 			<form onSubmit={this.handleSubmit.bind(this)}>
 				<h2 className="form-signin-heading">Bolius login - Logget ind</h2>
-				<p>Du er logget ind i bolius universet med brugernavn <strong>{this.state.userDetails.name}</strong>. Vælg om du vil videre til</p>
+				<p>Du er logget ind i bolius universet som  <strong>{this.state.userDetails.firstName} {this.state.userDetails.lastName}</strong>. Vælg om du vil videre til</p>
 
 				<ul>
 					<li>Mit bolius (bolius.dk)</li>

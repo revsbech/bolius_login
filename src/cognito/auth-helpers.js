@@ -4,6 +4,30 @@ import { getLoginsFromLocallyStoredAccessTokens } from './utils';
 import { updateCredentials } from '../Redux/actions';
 import {resetRedirectUrls} from "./url-helpers";
 
+export const signOut = (props) => {
+	// Remove the facebook access token stored locally
+	localStorage.removeItem('facebookAccessToken');
+	localStorage.removeItem('twitterAccessToken');
+	localStorage.removeItem('googleAccessToken');
+	localStorage.removeItem('linkedinAccessToken');
+	resetRedirectUrls();
+
+
+	// If signed in with username/password, log out of cognito UserPool
+	let cognitoUser = props.state.cognito.user;
+	if (cognitoUser) {
+		cognitoUser.signOut();
+	}
+
+	// Clear state in store
+	if (props.logout) {
+		props.logout();
+	}
+
+	// Redirect to signin
+	props.history.push('/');
+};
+
 
 export const userHasValidIdentitySession = (props) => {
 	let creds = props.state.cognito.credentials;
@@ -38,34 +62,13 @@ export const userHasValidIdentitySession = (props) => {
 
 		}, err => {
 			console.log('err', err);
+			signOut(props);
 			props.history.push('/');
 		});
 
 	}
 };
 
-export const signOut = (props) => {
-	// Remove the facebook access token stored locally
-	localStorage.removeItem('facebookAccessToken');
-	localStorage.removeItem('twitterAccessToken');
-	localStorage.removeItem('googleAccessToken');
-	localStorage.removeItem('linkedinAccessToken');
-	resetRedirectUrls();
-
-	// If signed in with username/password, log out of cognito UserPool
-	let cognitoUser = props.state.cognito.user;
-	if (cognitoUser) {
-		cognitoUser.signOut();
-	}
-
-	//@todo We need to make sure that we sign out of Cognito as well!!
-
-	// Clear state in store
-	props.logout();
-
-	// Redirect to signin
-	props.history.push('/');
-};
 
 
 export const getCredentials = (state, appConfig) => {
