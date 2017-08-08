@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
 				swal({
 					type: 'error',
 					title: ' Fejl',
-					text: "Der opstod en fejl i kommunikationen med api.bolius.dk"
+					text: err.message
 				});
 			});
 		});

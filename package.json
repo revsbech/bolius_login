@@ -8,6 +8,7 @@
     "aws-sdk": "^2.56.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
+    "query-string": "^5.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-facebook-login": "^3.6.1",

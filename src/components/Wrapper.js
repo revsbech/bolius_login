@@ -7,10 +7,9 @@ import ConfirmEmailForm from './ConfirmEmailForm';
 import Dashboard from './Dashboard';
 import DeleteUser from './DeleteUser';
 import ForgotPassword from './ForgotPassword';
+import RefreshLogin from './RefreshLogin';
 import ForgotPasswordVerification from './ForgotPasswordVerification';
-import {
-  isHusetskalender
-} from "../cognito/url-helpers";
+import {getFailureRedirectUrl, getSuccessRedirectUrl, isHusetskalender} from "../cognito/url-helpers";
 
 class Wrapper extends React.Component {
 
@@ -22,6 +21,8 @@ class Wrapper extends React.Component {
     if (isHusetskalender()) {
       state = { bodyClass: 'husetskalender' };
     }
+    getSuccessRedirectUrl();
+    getFailureRedirectUrl();
 
 
     this.state = state;
@@ -45,6 +46,7 @@ class Wrapper extends React.Component {
                   <Route path="/confirm-email" component={ConfirmEmailForm} ></Route>
                   <Route path="/forgot-password" component={ForgotPassword}/>
                   <Route path="/forgot-password-verification" component={ForgotPasswordVerification}/>
+                  <AuthRoute path="/refresh" component={RefreshLogin}/>
                   <AuthRoute path="/dashboard" component={Dashboard}/>
                   <AuthRoute path="/delete-user" component={DeleteUser}/>
                 </div>

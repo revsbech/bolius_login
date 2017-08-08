@@ -15,7 +15,10 @@ class BoliusApi {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).then(result => {
-      return result.json();
+      if (result.ok) {
+        return result.json();
+      }
+      throw new Error("Brugeren findes ikke i api.bolius.dk");
     });
   }
 }
