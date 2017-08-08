@@ -9,7 +9,7 @@ import DeleteUser from './DeleteUser';
 import ForgotPassword from './ForgotPassword';
 import RefreshLogin from './RefreshLogin';
 import ForgotPasswordVerification from './ForgotPasswordVerification';
-import {getFailureRedirectUrl, getSuccessRedirectUrl, isHusetskalender} from "../cognito/url-helpers";
+import {isHusetskalender} from "../cognito/url-helpers";
 
 class Wrapper extends React.Component {
 
@@ -21,9 +21,6 @@ class Wrapper extends React.Component {
     if (isHusetskalender()) {
       state = { bodyClass: 'husetskalender' };
     }
-    getSuccessRedirectUrl();
-    getFailureRedirectUrl();
-
 
     this.state = state;
   }

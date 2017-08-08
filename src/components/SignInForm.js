@@ -33,6 +33,15 @@ class SignInForm extends React.Component {
     }
   }
 
+
+  componentWillMount() {
+    const queryString = require('query-string');
+    const parsed = queryString.parse(this.props.location.search);
+    if (parsed.redirect_url) {
+      localStorage.setItem('redirect_url', parsed.redirect_url);
+    }
+  }
+
   handleEmailChange(e) {
     this.setState({email: e.target.value});
   }
@@ -56,8 +65,9 @@ class SignInForm extends React.Component {
     }
 
     signInFacebook(response,  () => {
-      this.props.history.push('/dashboard');
-    }, this.props.history, this.props);
+        this.props.history.push('/dashboard');
+      }, this.props.history, this.props
+    );
   }
 
   handleTwitterLogin(response) {

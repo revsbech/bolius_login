@@ -9,27 +9,8 @@ export const isHusetskalender = () => {
   return false;
 };
 
-export const getSuccessRedirectUrl = () => {
-  const successUrl = getQueryVariable('success_url');
-  if (successUrl) {
-    localStorage.setItem('successUrl', successUrl);
-  }
-
-  return localStorage.getItem('successUrl');
-};
-
-export const getFailureRedirectUrl = () => {
-  const failureUrl = getQueryVariable('failure_url');
-  if (failureUrl) {
-    localStorage.setItem('failureUrl', failureUrl);
-  }
-
-  return localStorage.getItem('failureUrl');
-};
-
 export const resetRedirectUrls = () => {
-  localStorage.removeItem('successUrl');
-  localStorage.removeItem('failureUrl');
+  localStorage.removeItem('redirect_url');
   localStorage.removeItem('ref');
 };
 

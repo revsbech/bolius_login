@@ -58,6 +58,8 @@ export const signOut = (props) => {
 		cognitoUser.signOut();
 	}
 
+	//@todo We need to make sure that we sign out of Cognito as well!!
+
 	// Clear state in store
 	props.logout();
 

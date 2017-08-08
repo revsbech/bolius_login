@@ -91,7 +91,6 @@ export const getOpenIdTokenForCurrentUser = (props) => {
     let cognitoidentity  = new AWS.CognitoIdentity();
     cognitoidentity.getOpenIdToken(params, function(err,data) {
       //@todo handle if err != null (call reject)
-      console.log(data);
       if (err != null) {
         reject(err);
       }

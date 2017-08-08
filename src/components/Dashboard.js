@@ -24,6 +24,20 @@ class Dashboard extends React.Component {
 		e.preventDefault();
 		signOut(this.props);
 	}
+  componentWillMount() {
+		//If a redirect_url is stored in the localStorage. Should probably be added to the Redux state instead...
+		const redirect_url = localStorage.getItem('redirect_url');
+		if (redirect_url) {
+			getOpenIdTokenForCurrentUser(this.props).then((token) => {
+        this.setState({openIdToken: token});
+        if (token) {
+					localStorage.removeItem('redirect_url');
+					const url = redirect_url + '?jwt=' + token;
+					window.location = url;
+				}
+			})
+   	}
+	}
 
 	componentDidMount() {
 		this.fetchCurrentUserAndToken();

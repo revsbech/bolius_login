@@ -16,7 +16,7 @@ class RefreshLogin extends React.Component {
 
   componentWillMount() {
     const queryString = require('query-string');
-    const parsed = queryString.parse(this.props.location.search,"Parsed query Params");
+    const parsed = queryString.parse(this.props.location.search);
 
     getOpenIdTokenForCurrentUser(this.props).then((token) => {
       this.setState({openIdToken: token});
