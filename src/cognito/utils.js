@@ -1,12 +1,61 @@
 import appConfig from '../config';
 import AWS from "aws-sdk";
+import { CognitoAccessToken, CognitoIdToken,CognitoRefreshToken,CognitoUserSession } from 'amazon-cognito-identity-js';
 
 /**
+ * This is a ripof of the part from CogntioUser.getSession that only returns the cached part.
+ *
+ * It should proably be made as a prototype in order to use the this.store, but for now this is just copied.
+ * @param userPool
+ */
+const getCachedSession = userPool => {
+  let cognitoUser = userPool.getCurrentUser();
+  var keyPrefix = 'CognitoIdentityServiceProvider.' + userPool.getClientId() + '.' + cognitoUser.username;
+  var idTokenKey = keyPrefix + '.idToken';
+  var accessTokenKey = keyPrefix + '.accessToken';
+  var refreshTokenKey = keyPrefix + '.refreshToken';
+
+  if (localStorage.getItem(idTokenKey)) {
+
+    var idToken = new CognitoIdToken({
+      IdToken: localStorage.getItem(idTokenKey)
+    });
+    var accessToken = new CognitoAccessToken({
+      AccessToken: localStorage.getItem(accessTokenKey)
+    });
+    var refreshToken = new CognitoRefreshToken({
+      RefreshToken: localStorage.getItem(refreshTokenKey)
+    });
+
+    var sessionData = {
+      IdToken: idToken,
+      AccessToken: accessToken,
+      RefreshToken: refreshToken
+    };
+    return new CognitoUserSession(sessionData);
+  } else {
+    return;
+  }
+
+};
+
+
+/**
+ *
+ * Currently this does not refresh the session!
  *
  * @param userPool
  * @returns {boolean}
  */
 export const userHasValidUserpoolSession = userPool => {
+  const session = getCachedSession(userPool);
+  if (!session) {
+    return false;
+  } else {
+    return session.isValid()
+  }
+
+  /*
   let cognitoUser = userPool.getCurrentUser();
 
   if (!cognitoUser) return false;
@@ -19,7 +68,9 @@ export const userHasValidUserpoolSession = userPool => {
 
     return session.isValid();
   });
+  */
 };
+
 
 /**
  *
@@ -41,6 +92,18 @@ export const getIdTokenOfCurrentUser = userPool => {
   });
 };
 
+export const getIdTokenOfCurrentUserFromCache = userPool => {
+  let cognitoUser = userPool.getCurrentUser();
+
+  if (!cognitoUser) return false;
+  const session = getCachedSession(userPool);
+  if (!session) return false;
+  if (!session.isValid()) return false;
+
+  return session.getIdToken();
+
+};
+
 /**
  *
  * @param state
@@ -48,9 +111,13 @@ export const getIdTokenOfCurrentUser = userPool => {
  */
 export const getLoginsFromLocallyStoredAccessTokens = (state, appConfig) => {
   let logins = {};
-  if (userHasValidUserpoolSession(state.cognito.userPool)) {
+
+  // Here we only check the validity of the local cachedtoken. the normal call to getSession would possibly do a
+  // re-auth and can only be don async.
+  const idToken = getIdTokenOfCurrentUserFromCache(state.cognito.userPool);
+  if (idToken) {
     let cognitoKey = 'cognito-idp.' + appConfig.region + '.amazonaws.com/' + appConfig.UserPoolId;
-    logins[cognitoKey] = getIdTokenOfCurrentUser(state.cognito.userPool).getJwtToken();
+    logins[cognitoKey] = idToken.getJwtToken();
   }
 
   // Facebook login
@@ -99,3 +166,5 @@ export const getOpenIdTokenForCurrentUser = (props) => {
 
   });
 };
+
+
