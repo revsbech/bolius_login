@@ -11,7 +11,8 @@ export class BoliusApi {
       method: 'get',
       headers: {
         'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'cache-control': 'no-cache'
       }
     }).then(result => {
       if (result.ok) {
